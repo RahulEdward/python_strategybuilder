@@ -949,7 +949,7 @@
                     {% if user %}
                         <span class="user-welcome">Welcome, {{ user.username }}!</span>
                         <a href="/dashboard" class="btn btn-login">Dashboard</a>
-                        <form method="post" action="/auth/logout" style="display: inline;">
+                        <form method="post" action="/api/auth/logout" style="display: inline;">
                             <button type="submit" class="btn btn-register">Logout</button>
                         </form>
                     {% else %}

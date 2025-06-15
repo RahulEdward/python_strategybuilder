@@ -1,0 +1,379 @@
+2025-06-14 18:36:32,684 - app.main - INFO - Database tables created successfully
+2025-06-14 18:36:32,686 - app.main - INFO - Static files mounted from app/static
+2025-06-14 18:36:32,687 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 18:36:32,693 - app.main - INFO - Auth router included
+2025-06-14 18:36:32,694 - app.main - INFO - Builder router included
+2025-06-14 18:36:32,695 - app.main - INFO - Dashboard router included
+2025-06-14 18:36:32,698 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 18:36:32,698 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 18:36:32,699 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 18:38:04,329 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 18:44:55,015 - app.main - INFO - Database tables created successfully
+2025-06-14 18:44:55,016 - app.main - INFO - Static files mounted from app/static
+2025-06-14 18:44:55,017 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 18:44:55,021 - app.main - INFO - Auth router included
+2025-06-14 18:44:55,021 - app.main - INFO - Builder router included
+2025-06-14 18:44:55,022 - app.main - INFO - Dashboard router included
+2025-06-14 18:44:55,026 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 18:44:55,026 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 18:44:55,027 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 18:51:23,132 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 18:51:24,767 - app.main - INFO - Database tables created successfully
+2025-06-14 18:51:24,769 - app.main - INFO - Static files mounted from app/static
+2025-06-14 18:51:24,769 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 18:51:24,775 - app.main - INFO - Auth router included
+2025-06-14 18:51:24,775 - app.main - INFO - Builder router included
+2025-06-14 18:51:24,777 - app.main - INFO - Dashboard router included
+2025-06-14 18:51:24,780 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 18:51:24,780 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 18:51:24,780 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 18:52:31,556 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 18:52:49,593 - app.main - INFO - Database tables created successfully
+2025-06-14 18:52:49,594 - app.main - INFO - Static files mounted from app/static
+2025-06-14 18:52:49,595 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 18:52:49,600 - app.main - INFO - Auth router included
+2025-06-14 18:52:49,600 - app.main - INFO - Builder router included
+2025-06-14 18:52:49,602 - app.main - INFO - Dashboard router included
+2025-06-14 18:52:49,604 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 18:52:49,604 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 18:52:49,605 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 18:53:14,665 - app.api.routes.auth - INFO - Registration attempt for username: erahul41, email: rhl.edward@gmail.com
+2025-06-14 18:53:14,690 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\USER\OneDrive\Desktop\python_strategybuilder\venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-06-14 18:53:15,046 - app.api.routes.auth - INFO - Successful registration for username: erahul41
+2025-06-14 18:58:13,605 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 18:58:15,168 - app.main - INFO - Database tables created successfully
+2025-06-14 18:58:15,169 - app.main - INFO - Static files mounted from app/static
+2025-06-14 18:58:15,170 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 18:58:15,176 - app.main - INFO - Auth router included
+2025-06-14 18:58:15,176 - app.main - INFO - Builder router included
+2025-06-14 18:58:15,177 - app.main - INFO - Dashboard router included
+2025-06-14 18:58:15,181 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 18:58:15,181 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 18:58:15,181 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 19:00:14,330 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 19:00:16,163 - app.main - INFO - Database tables created successfully
+2025-06-14 19:00:16,164 - app.main - INFO - Static files mounted from app/static
+2025-06-14 19:00:16,165 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 19:00:16,179 - app.main - INFO - Auth router included
+2025-06-14 19:00:16,180 - app.main - INFO - Builder router included
+2025-06-14 19:00:16,182 - app.main - INFO - Dashboard router included
+2025-06-14 19:00:16,188 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 19:00:16,188 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 19:00:16,188 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 19:00:22,690 - app.api.routes.auth - INFO - User logout
+2025-06-14 19:00:36,611 - app.api.routes.auth - INFO - Login attempt for username: None
+2025-06-14 19:00:57,300 - app.api.routes.auth - INFO - Login attempt for username: None
+2025-06-14 19:01:42,814 - app.api.routes.auth - INFO - Login attempt for username: None
+2025-06-14 19:04:27,927 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 19:04:29,660 - app.main - INFO - Database tables created successfully
+2025-06-14 19:04:29,662 - app.main - INFO - Static files mounted from app/static
+2025-06-14 19:04:29,662 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 19:04:29,674 - app.main - INFO - Auth router included
+2025-06-14 19:04:29,675 - app.main - INFO - Builder router included
+2025-06-14 19:04:29,676 - app.main - INFO - Dashboard router included
+2025-06-14 19:04:29,685 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 19:04:29,686 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 19:04:29,686 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 19:04:38,485 - app.api.routes.auth - ERROR - Database connection test failed: Textual SQL expression 'SELECT 1' should be explicitly declared as text('SELECT 1')
+2025-06-14 19:06:04,224 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 19:06:06,092 - app.main - INFO - Database tables created successfully
+2025-06-14 19:06:06,093 - app.main - INFO - Static files mounted from app/static
+2025-06-14 19:06:06,093 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 19:06:06,109 - app.main - INFO - Auth router included
+2025-06-14 19:06:06,110 - app.main - INFO - Builder router included
+2025-06-14 19:06:06,111 - app.main - INFO - Dashboard router included
+2025-06-14 19:06:06,119 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 19:06:06,119 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 19:06:06,119 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 19:06:40,192 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 19:06:41,761 - app.main - INFO - Database tables created successfully
+2025-06-14 19:06:41,763 - app.main - INFO - Static files mounted from app/static
+2025-06-14 19:06:41,763 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 19:06:41,778 - app.main - INFO - Auth router included
+2025-06-14 19:06:41,780 - app.main - INFO - Builder router included
+2025-06-14 19:06:41,780 - app.main - INFO - Dashboard router included
+2025-06-14 19:06:41,787 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 19:06:41,788 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 19:06:41,788 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 19:06:55,689 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 19:07:31,868 - app.main - INFO - Database tables created successfully
+2025-06-14 19:07:31,870 - app.main - INFO - Static files mounted from app/static
+2025-06-14 19:07:31,870 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 19:07:31,883 - app.main - INFO - Auth router included
+2025-06-14 19:07:31,884 - app.main - INFO - Builder router included
+2025-06-14 19:07:31,886 - app.main - INFO - Dashboard router included
+2025-06-14 19:07:31,893 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 19:07:31,893 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 19:07:31,893 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 19:07:55,801 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 19:07:55,801 - app.api.routes.auth - INFO - Content-Type: application/json
+2025-06-14 19:07:55,802 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 19:07:55,802 - app.api.routes.auth - INFO - Request body: {"email":"rhl.edward@gmail.com","password":"Rahul98765@"}...
+2025-06-14 19:07:55,803 - app.api.routes.auth - INFO - JSON data extracted - username: None, password: ***********
+2025-06-14 19:07:55,803 - app.api.routes.auth - INFO - Form data - username: None, password: ***********
+2025-06-14 19:07:55,804 - app.api.routes.auth - INFO - Login attempt for username: 'None'
+2025-06-14 19:07:55,804 - app.api.routes.auth - WARNING - Validation failed: Username and password are required
+2025-06-14 19:11:14,778 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 19:11:14,779 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 19:11:14,780 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 19:11:14,780 - app.api.routes.auth - INFO - Login attempt for username: 'test'
+2025-06-14 19:11:14,783 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 19:11:14,783 - app.api.routes.auth - INFO - Attempting to authenticate user: 'test'
+2025-06-14 19:11:14,794 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\USER\OneDrive\Desktop\python_strategybuilder\venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-06-14 19:11:15,122 - app.api.routes.auth - INFO - Successful login for username: 'test'
+2025-06-14 19:16:02,868 - app.api.routes.auth - INFO - User logout
+2025-06-14 19:16:10,526 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 19:16:10,527 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 19:16:10,527 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 19:16:10,527 - app.api.routes.auth - INFO - Login attempt for username: 'test'
+2025-06-14 19:16:10,530 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 19:16:10,531 - app.api.routes.auth - INFO - Attempting to authenticate user: 'test'
+2025-06-14 19:16:10,826 - app.api.routes.auth - INFO - Successful login for username: 'test'
+2025-06-14 19:16:16,345 - app.api.routes.auth - INFO - User logout
+2025-06-14 19:16:36,611 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 19:16:36,611 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 19:16:36,612 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 19:16:36,614 - app.api.routes.auth - INFO - Login attempt for username: 'rhl.edward@gmail.com'
+2025-06-14 19:16:36,617 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 19:16:36,618 - app.api.routes.auth - INFO - Attempting to authenticate user: 'rhl.edward@gmail.com'
+2025-06-14 19:16:36,621 - app.api.routes.auth - WARNING - Authentication failed for username: 'rhl.edward@gmail.com'
+2025-06-14 19:18:13,781 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 19:18:13,781 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 19:18:13,781 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 19:18:13,782 - app.api.routes.auth - INFO - Login attempt for username: 'test'
+2025-06-14 19:18:13,783 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 19:18:13,786 - app.api.routes.auth - INFO - Attempting to authenticate user: 'test'
+2025-06-14 19:18:14,109 - app.api.routes.auth - INFO - Successful login for username: 'test'
+2025-06-14 19:18:17,217 - app.api.routes.auth - INFO - User logout
+2025-06-14 19:18:36,682 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 19:18:36,683 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 19:18:36,683 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 19:18:36,683 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41'
+2025-06-14 19:18:36,684 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 19:18:36,684 - app.api.routes.auth - INFO - Attempting to authenticate user: 'erahul41'
+2025-06-14 19:18:36,983 - app.api.routes.auth - INFO - Successful login for username: 'erahul41'
+2025-06-14 19:19:01,619 - app.api.routes.auth - INFO - User logout
+2025-06-14 19:19:11,033 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-14 21:54:10,119 - app.main - INFO - Database tables created successfully
+2025-06-14 21:54:10,119 - app.main - INFO - Static files mounted from app/static
+2025-06-14 21:54:10,120 - app.main - INFO - Templates loaded from app/templates
+2025-06-14 21:54:10,141 - app.main - INFO - Auth router included
+2025-06-14 21:54:10,143 - app.main - INFO - Builder router included
+2025-06-14 21:54:10,145 - app.main - INFO - Dashboard router included
+2025-06-14 21:54:10,150 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-14 21:54:10,150 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-14 21:54:10,150 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-14 21:54:52,078 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 21:54:52,079 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 21:54:52,079 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 21:54:52,079 - app.api.routes.auth - INFO - Login attempt for username: 'rhl.edward1@gmail.com'
+2025-06-14 21:54:52,080 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 21:54:52,080 - app.api.routes.auth - INFO - Attempting to authenticate user: 'rhl.edward1@gmail.com'
+2025-06-14 21:54:52,088 - app.api.routes.auth - WARNING - Authentication failed for username: 'rhl.edward1@gmail.com'
+2025-06-14 21:55:03,257 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 21:55:03,258 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 21:55:03,258 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 21:55:03,259 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41'
+2025-06-14 21:55:03,260 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 21:55:03,260 - app.api.routes.auth - INFO - Attempting to authenticate user: 'erahul41'
+2025-06-14 21:55:03,588 - app.api.routes.auth - WARNING - Authentication failed for username: 'erahul41'
+2025-06-14 21:55:57,861 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-14 21:55:57,862 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-14 21:55:57,863 - app.api.routes.auth - INFO - Request method: POST
+2025-06-14 21:55:57,863 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41'
+2025-06-14 21:55:57,866 - app.api.routes.auth - INFO - Database connection successful
+2025-06-14 21:55:57,868 - app.api.routes.auth - INFO - Attempting to authenticate user: 'erahul41'
+2025-06-14 21:55:58,183 - app.api.routes.auth - INFO - Successful login for username: 'erahul41'
+2025-06-14 22:16:53,096 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:03:03,325 - app.main - INFO - Database tables created successfully
+2025-06-15 09:03:03,326 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:03:03,326 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:03:03,349 - app.main - INFO - Auth router included
+2025-06-15 09:03:03,349 - app.main - INFO - Builder router included
+2025-06-15 09:03:03,350 - app.main - INFO - Dashboard router included
+2025-06-15 09:03:03,356 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:03:03,356 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:03:03,356 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:05:21,322 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:05:23,625 - app.main - INFO - Database tables created successfully
+2025-06-15 09:05:23,627 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:05:23,627 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:05:23,653 - app.main - INFO - Auth router included
+2025-06-15 09:05:23,654 - app.main - INFO - Builder router included
+2025-06-15 09:05:23,656 - app.main - INFO - Dashboard router included
+2025-06-15 09:05:23,659 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:05:23,660 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:05:23,660 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:05:30,820 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:05:33,188 - app.main - INFO - Database tables created successfully
+2025-06-15 09:05:33,190 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:05:33,190 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:05:33,224 - app.main - INFO - Auth router included
+2025-06-15 09:05:33,225 - app.main - INFO - Builder router included
+2025-06-15 09:05:33,227 - app.main - INFO - Dashboard router included
+2025-06-15 09:05:33,232 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:05:33,233 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:05:33,233 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:13:31,139 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:13:33,250 - app.main - INFO - Database tables created successfully
+2025-06-15 09:13:33,251 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:13:33,252 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:13:33,277 - app.main - INFO - Auth router included
+2025-06-15 09:13:33,277 - app.main - INFO - Builder router included
+2025-06-15 09:13:33,278 - app.main - INFO - Dashboard router included
+2025-06-15 09:13:33,284 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:13:33,284 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:13:33,284 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:17:14,903 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:17:16,956 - app.main - INFO - Database tables created successfully
+2025-06-15 09:17:16,957 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:17:16,957 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:17:16,979 - app.main - INFO - Auth router included
+2025-06-15 09:17:16,980 - app.main - INFO - Builder router included
+2025-06-15 09:17:16,981 - app.main - INFO - Dashboard router included
+2025-06-15 09:17:16,984 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:17:16,985 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:17:16,985 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:17:33,555 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:17:36,253 - app.main - INFO - Database tables created successfully
+2025-06-15 09:17:36,254 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:17:36,254 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:17:36,276 - app.main - INFO - Auth router included
+2025-06-15 09:17:36,277 - app.main - INFO - Builder router included
+2025-06-15 09:17:36,278 - app.main - INFO - Dashboard router included
+2025-06-15 09:17:36,283 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:17:36,283 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:17:36,283 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:18:33,028 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:18:35,019 - app.main - INFO - Database tables created successfully
+2025-06-15 09:18:35,020 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:18:35,021 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:18:35,048 - app.main - INFO - Auth router included
+2025-06-15 09:18:35,048 - app.main - INFO - Builder router included
+2025-06-15 09:18:35,049 - app.main - INFO - Dashboard router included
+2025-06-15 09:18:35,053 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:18:35,053 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:18:35,053 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:28:17,613 - app.api.routes.auth - INFO - Login request received from: 127.0.0.1
+2025-06-15 09:28:17,616 - app.api.routes.auth - INFO - Content-Type: application/x-www-form-urlencoded
+2025-06-15 09:28:17,618 - app.api.routes.auth - INFO - Request method: POST
+2025-06-15 09:28:17,619 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41'
+2025-06-15 09:28:17,622 - app.api.routes.auth - INFO - Database connection successful
+2025-06-15 09:28:17,623 - app.api.routes.auth - INFO - Attempting to authenticate user: 'erahul41'
+2025-06-15 09:28:18,012 - app.api.routes.auth - INFO - Successful login for username: 'erahul41'
+2025-06-15 09:42:25,811 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:42:28,244 - app.main - INFO - Database tables created successfully
+2025-06-15 09:42:28,245 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:42:28,245 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:42:28,277 - app.main - INFO - Auth router included
+2025-06-15 09:42:28,277 - app.main - INFO - Builder router included
+2025-06-15 09:42:28,279 - app.main - INFO - Dashboard router included
+2025-06-15 09:42:28,301 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:42:28,301 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:42:28,301 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 09:54:02,255 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 09:54:04,167 - app.main - INFO - Database tables created successfully
+2025-06-15 09:54:04,171 - app.main - INFO - Static files mounted from app/static
+2025-06-15 09:54:04,171 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 09:54:04,244 - app.main - INFO - Auth router included
+2025-06-15 09:54:04,244 - app.main - INFO - Builder router included
+2025-06-15 09:54:04,248 - app.main - INFO - Dashboard router included
+2025-06-15 09:54:04,279 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 09:54:04,279 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 09:54:04,280 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 10:04:10,967 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 10:04:12,754 - app.main - INFO - Database tables created successfully
+2025-06-15 10:04:12,755 - app.main - INFO - Static files mounted from app/static
+2025-06-15 10:04:12,756 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 10:04:12,813 - app.main - INFO - Auth router included
+2025-06-15 10:04:12,814 - app.main - INFO - Builder router included
+2025-06-15 10:04:12,818 - app.main - INFO - Dashboard router included
+2025-06-15 10:04:12,839 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 10:04:12,839 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 10:04:12,839 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 10:20:57,268 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 10:20:58,979 - app.main - INFO - Database tables created successfully
+2025-06-15 10:20:58,980 - app.main - INFO - Static files mounted from app/static
+2025-06-15 10:20:58,981 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 10:20:59,052 - app.main - INFO - Auth router included
+2025-06-15 10:20:59,054 - app.main - INFO - Builder router included
+2025-06-15 10:20:59,061 - app.main - INFO - Dashboard router included
+2025-06-15 10:20:59,094 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 10:20:59,096 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 10:20:59,097 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 10:22:16,099 - app.main - WARNING - 404 error for URL: http://127.0.0.1:8000/static/favicon.ico
+2025-06-15 10:22:19,626 - app.api.routes.auth - INFO - Login attempt from IP: 127.0.0.1
+2025-06-15 10:22:19,626 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41' (Remember me: False)
+2025-06-15 10:22:19,628 - app.api.routes.auth - INFO - Attempting authentication for user: 'erahul41'
+2025-06-15 10:22:19,973 - app.api.routes.auth - ERROR - Unexpected error in login: 'User' object has no attribute 'is_active'
+2025-06-15 10:22:19,974 - app.api.routes.auth - WARNING - Error response: Internal server error. Please try again. (Status: 500)
+2025-06-15 10:22:29,296 - app.api.routes.auth - INFO - Login attempt from IP: 127.0.0.1
+2025-06-15 10:22:29,299 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41' (Remember me: False)
+2025-06-15 10:22:29,300 - app.api.routes.auth - INFO - Attempting authentication for user: 'erahul41'
+2025-06-15 10:22:29,619 - app.api.routes.auth - ERROR - Unexpected error in login: 'User' object has no attribute 'is_active'
+2025-06-15 10:22:29,619 - app.api.routes.auth - WARNING - Error response: Internal server error. Please try again. (Status: 500)
+2025-06-15 10:24:23,554 - app.main - INFO - Database tables created successfully
+2025-06-15 10:24:23,555 - app.main - INFO - Static files mounted from app/static
+2025-06-15 10:24:23,556 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 10:24:23,598 - app.main - INFO - Auth router included
+2025-06-15 10:24:23,598 - app.main - INFO - Builder router included
+2025-06-15 10:24:23,603 - app.main - INFO - Dashboard router included
+2025-06-15 10:24:23,622 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 10:24:23,622 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 10:24:23,623 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 10:24:34,257 - app.api.routes.auth - INFO - Login attempt from IP: 127.0.0.1
+2025-06-15 10:24:34,258 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41' (Remember me: False)
+2025-06-15 10:24:34,260 - app.api.routes.auth - INFO - Attempting authentication for user: 'erahul41'
+2025-06-15 10:24:34,608 - app.api.routes.auth - ERROR - Unexpected error in login: 'User' object has no attribute 'is_active'
+2025-06-15 10:24:34,609 - app.api.routes.auth - WARNING - Error response: Internal server error. Please try again. (Status: 500)
+2025-06-15 10:51:47,553 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 10:51:50,541 - app.main - INFO - Database tables created successfully
+2025-06-15 10:51:50,542 - app.main - INFO - Static files mounted from app/static
+2025-06-15 10:51:50,542 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 10:51:50,588 - app.main - INFO - Auth router included
+2025-06-15 10:51:50,589 - app.main - INFO - Builder router included
+2025-06-15 10:51:50,594 - app.main - INFO - Dashboard router included
+2025-06-15 10:51:50,613 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 10:51:50,613 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 10:51:50,614 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 10:52:59,493 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 10:53:01,777 - app.main - INFO - Database tables created successfully
+2025-06-15 10:53:01,778 - app.main - INFO - Static files mounted from app/static
+2025-06-15 10:53:01,778 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 10:53:01,825 - app.main - INFO - Auth router included
+2025-06-15 10:53:01,825 - app.main - INFO - Builder router included
+2025-06-15 10:53:01,832 - app.main - INFO - Dashboard router included
+2025-06-15 10:53:01,857 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 10:53:01,858 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 10:53:01,858 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 10:53:02,829 - app.main - INFO - Strategy Builder SaaS application shutting down...
+2025-06-15 11:17:50,316 - app.main - INFO - Database tables created successfully
+2025-06-15 11:17:50,317 - app.main - INFO - Static files mounted from app/static
+2025-06-15 11:17:50,317 - app.main - INFO - Templates loaded from app/templates
+2025-06-15 11:17:50,361 - app.main - INFO - Auth router included
+2025-06-15 11:17:50,361 - app.main - INFO - Builder router included
+2025-06-15 11:17:50,365 - app.main - INFO - Dashboard router included
+2025-06-15 11:17:50,382 - app.main - INFO - Strategy Builder SaaS application starting up...
+2025-06-15 11:17:50,382 - app.main - INFO - Running on: http://127.0.0.1:5001
+2025-06-15 11:17:50,382 - app.main - INFO - Documentation: http://127.0.0.1:5001/docs
+2025-06-15 11:18:37,795 - app.api.routes.auth - INFO - Login attempt from IP: 127.0.0.1
+2025-06-15 11:18:37,796 - app.api.routes.auth - INFO - Login attempt for username: 'erahul41' (Remember me: False)
+2025-06-15 11:18:37,800 - app.api.routes.auth - INFO - Attempting authentication for user: 'erahul41'
+2025-06-15 11:18:37,815 - app.api.routes.auth - ERROR - Authentication error for user 'erahul41': (sqlite3.OperationalError) no such column: users.hashed_password
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.is_active AS users_is_active, users.is_superuser AS users_is_superuser, users.created_at AS users_created_at, users.updated_at AS users_updated_at, users.last_login AS users_last_login 
+FROM users 
+WHERE users.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('erahul41', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-15 11:18:37,819 - app.api.routes.auth - WARNING - Error response: Authentication service error. Please try again. (Status: 500)

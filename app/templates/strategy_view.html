@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Strategy - {{ strategy.name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-gray-50 dark:bg-gray-900">
+    <div class="min-h-full">
+        <!-- Navigation -->
+        <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="/dashboard" class="text-xl font-bold text-gray-900 dark:text-white">
+                            Strategy Builder
+                        </a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ user.username }}</span>
+                        <form method="post" action="/api/auth/logout" style="display: inline;">
+                            <button type="submit" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 bg-transparent border-none cursor-pointer p-0">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div class="px-4 py-6 sm:px-0">
+                <!-- Header -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ strategy.name }}</h1>
+                            {% if strategy.description %}
+                            <p class="mt-2 text-gray-600 dark:text-gray-400">{{ strategy.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="flex space-x-3">
+                            <a href="/strategy/{{ strategy.id }}/edit" 
+                               class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                                Edit Strategy
+                            </a>
+                            <a href="/dashboard" 
+                               class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Details -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Strategy Parameters -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Strategy Parameters</h2>
+                            <dl class="space-y-4">
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Indicator</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ strategy.indicator }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Operator</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ strategy.operator }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Value</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ strategy.value }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Stop Loss</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ strategy.stop_loss }}%</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Target</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ strategy.target }}%</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Capital</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">${{ "{:,.2f}".format(strategy.capital) }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Created</dt>
+                                    <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ strategy.created_at.strftime('%B %d, %Y at %I:%M %p') }}</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Generated Code -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Generated Strategy Code</h2>
+                                <button onclick="copyCode()" 
+                                        class="inline-flex items-center px-3 py-1.5 bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium rounded transition-colors">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy Code
+                                </button>
+                            </div>
+                            <div class="relative">
+                                <pre id="strategyCode" class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm font-mono whitespace-pre-wrap">{{ strategy.generated_code }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-center space-x-4">
+                    <a href="/strategy/{{ strategy.id }}/edit" 
+                       class="inline-flex items-center px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        Edit Strategy
+                    </a>
+                    
+                    <form action="/strategy/{{ strategy.id }}/delete" method="POST" class="inline" onsubmit="return confirmDelete()">
+                        <button type="submit" 
+                                class="inline-flex items-center px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Delete Strategy
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function copyCode() {
+            const codeElement = document.getElementById('strategyCode');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show feedback
+            const button = event.target.closest('button');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Copied!';
+            button.classList.add('bg-green-500', 'hover:bg-green-600');
+            button.classList.remove('bg-primary-500', 'hover:bg-primary-600');
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.classList.remove('bg-green-500', 'hover:bg-green-600');
+                button.classList.add('bg-primary-500', 'hover:bg-primary-600');
+            }, 2000);
+        }
+
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this strategy? This action cannot be undone.');
+        }
+
+        // Initialize dark mode
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        initializeTheme();
+    </script>
+</body>
+</html>

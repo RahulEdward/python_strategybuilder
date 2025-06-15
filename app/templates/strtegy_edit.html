@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Strategy - {{ strategy.name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-gray-50 dark:bg-gray-900">
+    <div class="min-h-full">
+        <!-- Navigation -->
+        <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="/dashboard" class="text-xl font-bold text-gray-900 dark:text-white">
+                            Strategy Builder
+                        </a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ user.username }}</span>
+                        <form method="post" action="/api/auth/logout" style="display: inline;">
+                            <button type="submit" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 bg-transparent border-none cursor-pointer p-0">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div class="px-4 py-6 sm:px-0">
+                <!-- Header -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Edit Strategy</h1>
+                            <p class="mt-2 text-gray-600 dark:text-gray-400">Modify your trading strategy parameters</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <a href="/strategy/{{ strategy.id }}" 
+                               class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                View Strategy
+                            </a>
+                            <a href="/dashboard" 
+                               class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Form -->
+                <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                    <form action="/strategy/{{ strategy.id }}/edit" method="POST" class="space-y-6 p-6">
+                        <!-- Basic Information -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Strategy Name *
+                                </label>
+                                <input type="text" 
+                                       id="name" 
+                                       name="name" 
+                                       value="{{ strategy.name }}"
+                                       required
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                            </div>
+
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Description
+                                </label>
+                                <input type="text" 
+                                       id="description" 
+                                       name="description" 
+                                       value="{{ strategy.description or '' }}"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                            </div>
+                        </div>
+
+                        <!-- Strategy Parameters -->
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Strategy Parameters</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Indicator Field -->
+                                <div>
+                                    <label for="indicator" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Indicator *
+                                    </label>
+                                    <select id="indicator" 
+                                            name="indicator" 
+                                            required
+                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                                        {% for ind in indicators %}
+                                        <option value="{{ ind }}" {% if ind == strategy.indicator %}selected{% endif %}>{{ ind }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Operator Field -->
+                                <div>
+                                    <label for="operator" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Operator *
+                                    </label>
+                                    <select id="operator" 
+                                            name="operator" 
+                                            required
+                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                                        {% for op in operators %}
+                                        <option value="{{ op }}" {% if op == strategy.operator %}selected{% endif %}>
+                                            {{ op.replace('_', ' ').title() }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Value Field -->
+                                <div>
+                                    <label for="value" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Value *
+                                    </label>
+                                    <input type="number" 
+                                           id="value" 
+                                           name="value" 
+                                           value="{{ strategy.value }}"
+                                           step="0.01"
+                                           required
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Management -->
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Risk Management</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label for="stop_loss" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Stop Loss (%) *
+                                    </label>
+                                    <input type="number" 
+                                           id="stop_loss" 
+                                           name="stop_loss" 
+                                           value="{{ strategy.stop_loss }}"
+                                           step="0.01"
+                                           min="0"
+                                           max="100"
+                                           required
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+
+                                <div>
+                                    <label for="target" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Target (%) *
+                                    </label>
+                                    <input type="number" 
+                                           id="target" 
+                                           name="target" 
+                                           value="{{ strategy.target }}"
+                                           step="0.01"
+                                           min="0"
+                                           required
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+
+                                <div>
+                                    <label for="capital" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Capital ($) *
+                                    </label>
+                                    <input type="number" 
+                                           id="capital" 
+                                           name="capital" 
+                                           value="{{ strategy.capital }}"
+                                           step="0.01"
+                                           min="0"
+                                           required
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <div class="flex justify-end space-x-4">
+                                <a href="/strategy/{{ strategy.id }}" 
+                                   class="inline-flex items-center px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium rounded-lg transition-colors">
+                                    Cancel
+                                </a>
+                                <button type="submit" 
+                                        class="inline-flex items-center px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                    </svg>
+                                    Update Strategy
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Current Strategy Preview -->
+                <div class="mt-8 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Current Strategy Summary</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Indicator</div>
+                            <div class="text-gray-600 dark:text-gray-400">{{ strategy.indicator }}</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Operator</div>
+                            <div class="text-gray-600 dark:text-gray-400">{{ strategy.operator.replace('_', ' ').title() }}</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Value</div>
+                            <div class="text-gray-600 dark:text-gray-400">{{ strategy.value }}</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Stop Loss</div>
+                            <div class="text-gray-600 dark:text-gray-400">{{ strategy.stop_loss }}%</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Target</div>
+                            <div class="text-gray-600 dark:text-gray-400">{{ strategy.target }}%</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Capital</div>
+                            <div class="text-gray-600 dark:text-gray-400">${{ "{:,.2f}".format(strategy.capital) }}</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Created</div>
+                            <div class="text-gray-600 dark:text-gray-400">{{ strategy.created_at.strftime('%m/%d/%Y') }}</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded">
+                            <div class="font-medium text-gray-900 dark:text-white">Last Modified</div>
+                            <div class="text-gray-600 dark:text-gray-400">{{ strategy.updated_at.strftime('%m/%d/%Y') if strategy.updated_at else 'Never' }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Form validation
+        function validateForm() {
+            const stopLoss = parseFloat(document.getElementById('stop_loss').value);
+            const target = parseFloat(document.getElementById('target').value);
+            const capital = parseFloat(document.getElementById('capital').value);
+
+            if (stopLoss <= 0 || stopLoss > 100) {
+                alert('Stop loss must be between 0 and 100%');
+                return false;
+            }
+
+            if (target <= 0) {
+                alert('Target must be greater than 0%');
+                return false;
+            }
+
+            if (capital <= 0) {
+                alert('Capital must be greater than 0');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Add form validation on submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+            }
+        });
+
+        // Initialize dark mode
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        initializeTheme();
+
+        // Auto-format currency input
+        document.getElementById('capital').addEventListener('input', function(e) {
+            let value = e.target.value;
+            // Remove non-numeric characters except decimal point
+            value = value.replace(/[^0-9.]/g, '');
+            e.target.value = value;
+        });
+
+        // Real-time form preview update (optional enhancement)
+        function updatePreview() {
+            const indicator = document.getElementById('indicator').value;
+            const operator = document.getElementById('operator').value;
+            const value = document.getElementById('value').value;
+            const stopLoss = document.getElementById('stop_loss').value;
+            const target = document.getElementById('target').value;
+            const capital = document.getElementById('capital').value;
+
+            // You can add real-time preview updates here if needed
+        }
+
+        // Add event listeners for real-time preview
+        ['indicator', 'operator', 'value', 'stop_loss', 'target', 'capital'].forEach(id => {
+            document.getElementById(id).addEventListener('change', updatePreview);
+        });
+    </script>
+</body>
+</html>
