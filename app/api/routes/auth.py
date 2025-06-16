@@ -502,7 +502,34 @@ async def logout(request: Request, current_user = Depends(get_current_user_optio
 @router.get("/logout")
 async def logout_get(request: Request, current_user = Depends(get_current_user_optional)):
     """Logout via GET request for convenience"""
-    return await logout(request, current_user)
+    try:
+        user_info = ""
+        if current_user:
+            user_info = f" for user {current_user.username}"
+            logger.info(f"User logout{user_info}")
+        else:
+            logger.info("Anonymous logout attempt")
+        
+        # Create a redirect response
+        response = RedirectResponse(url="/login", status_code=303)
+        
+        # Clear the authentication cookie
+        response.delete_cookie(key="access_token", path="/")
+        
+        # Add security headers
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        
+        logger.info(f"Logout successful, redirecting to /login")
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error in logout: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error"
+        )
 
 # ========== USER MANAGEMENT ROUTES ==========
 

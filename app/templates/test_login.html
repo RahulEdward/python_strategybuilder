@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow p-6">
+        <h1 class="text-2xl font-bold mb-6">Test Login Methods</h1>
+        
+        <div class="space-y-4">
+            <!-- Method 1: Direct Form Submit -->
+            <div class="p-4 border rounded">
+                <h2 class="font-bold mb-2">Method 1: Direct Form Submit</h2>
+                <form method="post" action="/api/auth/login">
+                    <div class="mb-4">
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="remember_me" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Login with Form Submit
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Method 2: Test User -->
+            <div class="p-4 border rounded">
+                <h2 class="font-bold mb-2">Method 2: Create Test User</h2>
+                <form method="post" action="/api/auth/create-test-user">
+                    <button type="submit" class="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        Create Test User
+                    </button>
+                </form>
+                <div class="mt-2 text-sm text-gray-600">
+                    This will create a test user with username: <strong>testuser</strong> and password: <strong>test123456</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <a href="/" class="text-blue-500 hover:underline">Back to Home</a>
+        </div>
+        
+        <!-- Debug Info -->
+        <div class="mt-6 p-4 bg-gray-100 rounded">
+            <h3 class="font-bold mb-2">Debug Information</h3>
+            <div id="debug-info" class="text-xs font-mono whitespace-pre-wrap"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Display any error or success messages from URL parameters
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const debugInfo = document.getElementById('debug-info');
+            
+            let debugText = '';
+            
+            if (urlParams.has('error')) {
+                debugText += `Error: ${urlParams.get('error')}\n`;
+            }
+            
+            if (urlParams.has('message')) {
+                debugText += `Message: ${urlParams.get('message')}\n`;
+            }
+            
+            // Add browser info
+            debugText += `\nBrowser Info:\n`;
+            debugText += `User Agent: ${navigator.userAgent}\n`;
+            debugText += `Cookies Enabled: ${navigator.cookieEnabled}\n`;
+            debugText += `Platform: ${navigator.platform}\n`;
+            
+            // Add current cookies (without values for security)
+            debugText += `\nCookies Present:\n`;
+            const cookies = document.cookie.split(';').map(c => c.trim());
+            if (cookies.length && cookies[0] !== '') {
+                cookies.forEach(cookie => {
+                    const name = cookie.split('=')[0];
+                    debugText += `- ${name}\n`;
+                });
+            } else {
+                debugText += `No cookies found\n`;
+            }
+            
+            debugInfo.textContent = debugText;
+        });
+    </script>
+</body>
+</html>
