@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Strategy Builder{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    backgroundImage: {
+                        'dot-grid': 'radial-gradient(circle, rgb(71 85 105 / 0.3) 1px, transparent 1px)',
+                        'dot-grid-light': 'radial-gradient(circle, rgb(148 163 184 / 0.2) 1px, transparent 1px)'
+                    }
+                }
+            }
+        }
+    </script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="h-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="flex h-full">
+        <!-- Fixed Left Sidebar -->
+        <aside class="fixed inset-y-0 left-0 z-20 w-64 bg-white dark:bg-gray-800 shadow-lg transition-colors duration-200 lg:block hidden">
+            <!-- Sidebar Content -->
+            <div class="flex flex-col h-full">
+                <!-- Logo/Brand -->
+                <div class="flex items-center justify-between h-16 border-b border-gray-200 dark:border-gray-700 px-4">
+                    <h1 class="text-xl font-bold text-gray-900 dark:text-white">Strategy Builder</h1>
+                    
+                    <!-- Theme toggle button -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Navigation Links -->
+                <nav class="flex-1 pt-6 pb-4 px-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="/dashboard" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/dashboard' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white{% endif %} transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/api/builder/" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if '/builder' in request.url.path %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white{% endif %} transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Create Strategy
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/strategies" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/strategies' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white{% endif %} transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                My Strategies
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/sessions" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/sessions' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white{% endif %} transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                Sessions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/settings" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/settings' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white{% endif %} transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <!-- Logout Button -->
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <button onclick="handleLogout()" class="flex w-full items-center px-4 py-3 text-sm font-medium rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile hamburger button (floating) -->
+        <button class="lg:hidden fixed top-4 left-4 z-50 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200" onclick="toggleMobileSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Mobile Sidebar Overlay -->
+        <div class="lg:hidden fixed inset-0 z-30 bg-black bg-opacity-50 hidden" id="sidebarOverlay" onclick="toggleMobileSidebar()">
+            <aside class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 shadow-lg transition-transform duration-200 transform -translate-x-full" id="mobileSidebar">
+                <!-- Same sidebar content as desktop -->
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+                        <h1 class="text-xl font-bold text-gray-900 dark:text-white">Strategy Builder</h1>
+                        <div class="flex items-center space-x-2">
+                            <!-- Theme toggle in mobile sidebar -->
+                            <button onclick="toggleTheme()" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+                                <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                                <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                                </svg>
+                            </button>
+                            <button class="p-2 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick="toggleMobileSidebar()">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Navigation - Same as desktop -->
+                    <nav class="flex-1 pt-6 pb-4 px-4">
+                        <ul class="space-y-2">
+                            <li>
+                                <a href="/dashboard" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/dashboard' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %}" onclick="toggleMobileSidebar()">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                    </svg>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/api/builder/" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if '/builder' in request.url.path %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %}" onclick="toggleMobileSidebar()">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Create Strategy
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/strategies" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/strategies' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %}" onclick="toggleMobileSidebar()">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                    </svg>
+                                    My Strategies
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/sessions" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/sessions' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %}" onclick="toggleMobileSidebar()">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                    Sessions
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/settings" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg {% if request.url.path == '/settings' %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %}" onclick="toggleMobileSidebar()">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    
+                    <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                        <button onclick="handleLogout()" class="flex w-full items-center px-4 py-3 text-sm font-medium rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Main Content Area with Dotted Background -->
+        <main class="flex-1 lg:ml-64 bg-dot-grid-light dark:bg-dot-grid bg-[length:20px_20px] overflow-auto h-full">
+            {% block content %}
+            <div class="h-full flex items-center justify-center">
+                <div class="text-center">
+                    <h2 class="text-3xl font-light text-gray-600 dark:text-gray-400 mb-4">Ready to build your strategy?</h2>
+                    <p class="text-lg text-gray-500 dark:text-gray-500">Select an option from the sidebar to get started</p>
+                </div>
+            </div>
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- Flash Messages -->
+    {% if message %}
+    <div id="flash-message" class="fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 
+        {% if message_type == 'success' %}bg-green-600{% elif message_type == 'error' %}bg-red-600{% else %}bg-blue-600{% endif %} text-white">
+        {{ message }}
+        <button onclick="this.parentElement.remove()" class="ml-3 text-white hover:text-gray-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+    {% endif %}
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Mobile sidebar toggle
+        function toggleMobileSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            const sidebar = document.getElementById('mobileSidebar');
+            
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    sidebar.classList.remove('-translate-x-full');
+                }, 10);
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 200);
+            }
+        }
+
+        // Handle logout functionality
+        function handleLogout() {
+            window.location.href = '/api/auth/logout';
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            // Auto-hide flash messages
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                setTimeout(() => {
+                    flashMessage.style.transform = 'translateX(100%)';
+                    setTimeout(() => flashMessage.remove(), 300);
+                }, 5000);
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -128,20 +128,23 @@ def create_response_with_token(request: Request, user, redirect_url: str = "/das
             "redirect": redirect_url,
             "status": "success",
             "user": user_data,
+            "access_token": access_token,  # ✅ Include token for Next.js
+            "token_type": "bearer",
             "token_expires": settings.access_token_expire_minutes
         })
     else:
         response = RedirectResponse(url=redirect_url, status_code=302)
     
-    # Set secure HTTP-only cookie with enhanced security
+    # ✅ Set cookie with proper settings for localhost
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=getattr(settings, 'secure_cookies', False),  # Set to True in production with HTTPS
+        secure=False,  # ✅ False for localhost development
         samesite="lax",
         max_age=settings.access_token_expire_minutes * 60,
-        path="/"
+        path="/",
+        domain=None  # ✅ Don't set domain for localhost
     )
     
     # Add security headers
@@ -152,48 +155,6 @@ def create_response_with_token(request: Request, user, redirect_url: str = "/das
     return response
 
 # ========== AUTHENTICATION ROUTES ==========
-
-@router.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request, current_user = Depends(get_current_user_optional)):
-    """Display login page with enhanced user experience"""
-    try:
-        if current_user:
-            logger.info(f"User {current_user.username} already logged in, redirecting to dashboard")
-            if is_api_request(request):
-                return JSONResponse(content={
-                    "message": "Already logged in", 
-                    "redirect": "/dashboard",
-                    "user": {"username": current_user.username, "email": current_user.email}
-                })
-            return RedirectResponse(url="/dashboard", status_code=302)
-        
-        # Check for previous messages
-        message = request.query_params.get("message")
-        error = request.query_params.get("error")
-        
-        if is_api_request(request):
-            return JSONResponse(content={
-                "message": "Login page", 
-                "login_url": "/api/auth/login",
-                "register_url": "/api/auth/register",
-                "endpoints": {
-                    "login": "POST /api/auth/login",
-                    "register": "POST /api/auth/register"
-                }
-            })
-            
-        return templates.TemplateResponse("login.html", {
-            "request": request,
-            "message": message,
-            "error": error,
-            "app_name": "Strategy Builder SaaS"
-        })
-        
-    except Exception as e:
-        logger.error(f"Error in login_page: {str(e)}")
-        if is_api_request(request):
-            return JSONResponse(content={"error": "Internal server error"}, status_code=500)
-        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.post("/login")
 async def login(
@@ -208,26 +169,22 @@ async def login(
         # Enhanced logging
         client_ip = request.client.host if request.client else "unknown"
         logger.info(f"Login attempt from IP: {client_ip}")
-        logger.debug(f"Content-Type: {request.headers.get('content-type', 'not set')}")
-        logger.debug(f"User-Agent: {request.headers.get('user-agent', 'not set')}")
         
-        # Handle JSON requests
-        request_data = {}
-        if is_api_request(request):
+        # Handle JSON requests from Next.js frontend
+        content_type = request.headers.get('content-type', '')
+        if 'application/json' in content_type.lower():
             try:
-                body = await request.body()
-                if body:
-                    request_data = json.loads(body.decode())
-                    username = request_data.get("username")
-                    password = request_data.get("password")
-                    remember_me = request_data.get("remember_me", False)
-                    logger.debug("JSON data extracted successfully")
+                data = await request.json()
+                username = data.get('username')
+                password = data.get('password')
+                remember_me = data.get('remember_me', False)
+                logger.info(f"Processing JSON login request for user: {username}")
             except json.JSONDecodeError as e:
-                logger.error(f"Error parsing JSON body: {str(e)}")
-                return handle_error_response(request, "login.html", "Invalid JSON data", 400)
-            except Exception as e:
-                logger.error(f"Error processing request body: {str(e)}")
-                return handle_error_response(request, "login.html", "Request processing error", 400)
+                logger.error(f"Invalid JSON in request: {str(e)}")
+                return JSONResponse(
+                    content={"detail": "Invalid JSON format"}, 
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
         
         logger.info(f"Login attempt for username: '{username}' (Remember me: {remember_me})")
         
@@ -284,10 +241,6 @@ async def login(
         # Successful authentication
         logger.info(f"Successful login for username: '{username}' from IP: {client_ip}")
         
-        # Create response with token (extended expiry if remember_me is checked)
-        if remember_me:
-            settings.access_token_expire_minutes = 60 * 24 * 7  # 7 days
-        
         return create_response_with_token(request, user, "/dashboard")
         
     except HTTPException:
@@ -300,49 +253,6 @@ async def login(
         logger.error(f"Unexpected error in login: {str(e)}")
         error_msg = "Internal server error. Please try again."
         return handle_error_response(request, "login.html", error_msg, 500)
-
-@router.get("/register", response_class=HTMLResponse)
-async def register_page(request: Request, current_user = Depends(get_current_user_optional)):
-    """Enhanced registration page with better UX"""
-    try:
-        if current_user:
-            logger.info(f"User {current_user.username} already logged in, redirecting to dashboard")
-            if is_api_request(request):
-                return JSONResponse(content={
-                    "message": "Already logged in", 
-                    "redirect": "/dashboard",
-                    "user": {"username": current_user.username, "email": current_user.email}
-                })
-            return RedirectResponse(url="/dashboard", status_code=302)
-        
-        # Check for messages
-        message = request.query_params.get("message")
-        error = request.query_params.get("error")
-        
-        if is_api_request(request):
-            return JSONResponse(content={
-                "message": "Register page", 
-                "register_url": "/api/auth/register",
-                "login_url": "/api/auth/login",
-                "requirements": {
-                    "username": "3-50 characters, letters, numbers, dots, hyphens, underscores only",
-                    "email": "Valid email address required",
-                    "password": "Minimum 6 characters, recommended 8+ with letters and numbers"
-                }
-            })
-            
-        return templates.TemplateResponse("register.html", {
-            "request": request,
-            "message": message,
-            "error": error,
-            "app_name": "Strategy Builder SaaS"
-        })
-        
-    except Exception as e:
-        logger.error(f"Error in register_page: {str(e)}")
-        if is_api_request(request):
-            return JSONResponse(content={"error": "Internal server error"}, status_code=500)
-        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.post("/register")
 async def register(
@@ -406,12 +316,6 @@ async def register(
             error_msg = "Passwords do not match"
             return handle_error_response(request, "register.html", error_msg, 400)
         
-        # Check terms acceptance (if required)
-        if hasattr(settings, 'require_terms_acceptance') and settings.require_terms_acceptance:
-            if not terms_accepted:
-                error_msg = "You must accept the terms and conditions"
-                return handle_error_response(request, "register.html", error_msg, 400)
-        
         # Test database connection
         try:
             db.execute(text("SELECT 1"))
@@ -465,6 +369,23 @@ async def register(
         error_msg = "Internal server error. Please try again."
         return handle_error_response(request, "register.html", error_msg, 500)
 
+@router.get("/me")
+async def get_current_user_info(current_user = Depends(get_current_user)):
+    """Get current authenticated user information - FIXED VERSION"""
+    try:
+        return {
+            "id": current_user.id,
+            "username": current_user.username,
+            "email": current_user.email,
+            "is_active": current_user.is_active,
+            # ✅ FIXED: Safe handling of None dates
+            "created_at": current_user.created_at.isoformat() if current_user.created_at else None,
+            "last_login": current_user.last_login.isoformat() if current_user.last_login else None
+        }
+    except Exception as e:
+        logger.error(f"Error getting user info: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get user information")
+
 @router.post("/logout")
 async def logout(request: Request, current_user = Depends(get_current_user_optional)):
     """Enhanced logout with proper cleanup"""
@@ -499,127 +420,6 @@ async def logout(request: Request, current_user = Depends(get_current_user_optio
             detail="Internal server error"
         )
 
-@router.get("/logout")
-async def logout_get(request: Request, current_user = Depends(get_current_user_optional)):
-    """Logout via GET request for convenience"""
-    try:
-        user_info = ""
-        if current_user:
-            user_info = f" for user {current_user.username}"
-            logger.info(f"User logout{user_info}")
-        else:
-            logger.info("Anonymous logout attempt")
-        
-        # Create a redirect response
-        response = RedirectResponse(url="/login", status_code=303)
-        
-        # Clear the authentication cookie
-        response.delete_cookie(key="access_token", path="/")
-        
-        # Add security headers
-        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        
-        logger.info(f"Logout successful, redirecting to /login")
-        return response
-        
-    except Exception as e:
-        logger.error(f"Error in logout: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error"
-        )
-
-# ========== USER MANAGEMENT ROUTES ==========
-
-@router.get("/me")
-async def get_current_user_info(current_user = Depends(get_current_user)):
-    """Get current authenticated user information"""
-    try:
-        return {
-            "id": current_user.id,
-            "username": current_user.username,
-            "email": current_user.email,
-            "is_active": current_user.is_active,
-            "created_at": current_user.created_at.isoformat() if hasattr(current_user, 'created_at') else None,
-            "last_login": current_user.last_login.isoformat() if hasattr(current_user, 'last_login') else None
-        }
-    except Exception as e:
-        logger.error(f"Error getting user info: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to get user information")
-
-@router.put("/me")
-async def update_user_profile(
-    request: Request,
-    email: Optional[str] = Form(None),
-    current_password: Optional[str] = Form(None),
-    new_password: Optional[str] = Form(None),
-    current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    """Update user profile information"""
-    try:
-        # Handle JSON requests
-        if is_api_request(request):
-            body = await request.body()
-            if body:
-                data = json.loads(body.decode())
-                email = data.get("email")
-                current_password = data.get("current_password")
-                new_password = data.get("new_password")
-        
-        # Update email if provided
-        if email and email != current_user.email:
-            if not validate_email(email):
-                raise HTTPException(status_code=400, detail="Invalid email format")
-            
-            # Check if email already exists
-            existing_email = get_user_by_email(db, email)
-            if existing_email and existing_email.id != current_user.id:
-                raise HTTPException(status_code=400, detail="Email already in use")
-            
-            current_user.email = email
-        
-        # Update password if provided
-        if new_password:
-            if not current_password:
-                raise HTTPException(status_code=400, detail="Current password required to change password")
-            
-            # Verify current password
-            if not verify_password(current_password, current_user.password_hash):
-                raise HTTPException(status_code=400, detail="Current password is incorrect")
-            
-            # Validate new password
-            is_valid, error_msg = validate_password_strength(new_password)
-            if not is_valid:
-                raise HTTPException(status_code=400, detail=error_msg)
-            
-            current_user.password_hash = get_password_hash(new_password)
-        
-        # Save changes
-        db.commit()
-        db.refresh(current_user)
-        
-        logger.info(f"Profile updated for user: {current_user.username}")
-        
-        return {
-            "message": "Profile updated successfully",
-            "user": {
-                "username": current_user.username,
-                "email": current_user.email
-            }
-        }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error updating profile: {str(e)}")
-        db.rollback()
-        raise HTTPException(status_code=500, detail="Failed to update profile")
-
-# ========== UTILITY ROUTES ==========
-
 @router.get("/health")
 async def health_check():
     """Enhanced health check endpoint"""
@@ -632,150 +432,5 @@ async def health_check():
             "register": "POST /api/auth/register",
             "logout": "POST /api/auth/logout",
             "profile": "GET /api/auth/me",
-            "update_profile": "PUT /api/auth/me"
-        },
-        "security_features": [
-            "JWT tokens",
-            "HTTP-only cookies",
-            "Password strength validation",
-            "Email validation",
-            "Rate limiting ready",
-            "CORS protection"
-        ]
-    }
-
-@router.get("/test-db")
-async def test_database_connection(db: Session = Depends(get_db)):
-    """Enhanced database connection test"""
-    try:
-        # Test basic connection
-        result = db.execute(text("SELECT 1 as test")).fetchone()
-        
-        # Test user table access
-        user_count = db.execute(text("SELECT COUNT(*) as count FROM users")).fetchone()
-        
-        db_url = str(db.get_bind().url)
-        # Hide password in URL for security
-        if db.get_bind().url.password:
-            db_url = db_url.replace(str(db.get_bind().url.password), "***")
-        
-        return {
-            "status": "database_connected",
-            "query_result": result[0] if result else None,
-            "user_count": user_count[0] if user_count else 0,
-            "database_url": db_url,
-            "database_type": db.get_bind().name
         }
-    except Exception as e:
-        logger.error(f"Database connection test failed: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database connection failed: {str(e)}"
-        )
-
-@router.post("/create-test-user")
-async def create_test_user(db: Session = Depends(get_db)):
-    """Create enhanced test user for debugging"""
-    try:
-        # Check if test user already exists
-        existing_user = get_user_by_username(db, "testuser")
-        if existing_user:
-            return JSONResponse(content={
-                "message": "Test user already exists",
-                "username": "testuser",
-                "email": "test@example.com",
-                "status": "exists",
-                "login_credentials": {
-                    "username": "testuser",
-                    "password": "test123456"
-                }
-            })
-        
-        # Create test user with stronger password
-        user_data = UserCreate(
-            username="testuser",
-            email="test@example.com",
-            password="test123456"
-        )
-        
-        user = create_user(db, user_data)
-        
-        logger.info("Test user created successfully")
-        
-        return JSONResponse(content={
-            "message": "Test user created successfully",
-            "username": user.username,
-            "email": user.email,
-            "status": "created",
-            "login_credentials": {
-                "username": "testuser",
-                "password": "test123456"
-            },
-            "note": "Use these credentials to test login functionality"
-        })
-        
-    except Exception as e:
-        logger.error(f"Error creating test user: {str(e)}")
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-
-@router.post("/forgot-password")
-async def forgot_password(
-    request: Request, 
-    email: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    """Enhanced password reset request"""
-    try:
-        # Validate email format
-        if not validate_email(email):
-            error_msg = "Please enter a valid email address"
-            return handle_error_response(request, "login.html", error_msg, 400)
-        
-        # Check if user exists (don't reveal if email exists for security)
-        user = get_user_by_email(db, email.strip().lower())
-        
-        # Always return success message for security
-        success_msg = "If this email is registered, you will receive password reset instructions"
-        
-        if user:
-            # In production, implement actual password reset logic here:
-            # 1. Generate secure reset token
-            # 2. Store token with expiration
-            # 3. Send email with reset link
-            logger.info(f"Password reset requested for existing email: {email}")
-        else:
-            logger.info(f"Password reset requested for non-existent email: {email}")
-        
-        if is_api_request(request):
-            return JSONResponse(content={
-                "message": success_msg,
-                "status": "success"
-            })
-        else:
-            return templates.TemplateResponse(
-                "login.html",
-                {
-                    "request": request, 
-                    "message": success_msg,
-                    "app_name": "Strategy Builder SaaS"
-                }
-            )
-            
-    except Exception as e:
-        logger.error(f"Error in forgot password: {str(e)}")
-        error_msg = "Password reset service temporarily unavailable"
-        return handle_error_response(request, "login.html", error_msg, 500)
-
-# Rate limiting placeholder route
-@router.get("/rate-limit-info")
-async def rate_limit_info():
-    """Information about rate limiting (for future implementation)"""
-    return {
-        "info": "Rate limiting not yet implemented",
-        "future_limits": {
-            "login_attempts": "5 per minute per IP",
-            "registration": "3 per hour per IP",
-            "password_reset": "3 per hour per email"
-        },
-        "recommendation": "Implement rate limiting with Redis or similar"
     }

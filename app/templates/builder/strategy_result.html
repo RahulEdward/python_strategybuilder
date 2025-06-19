@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-8">
+    <!-- Success Banner -->
+    <div class="bg-gradient-to-r from-green-400 to-blue-500 rounded-xl p-8 mb-8 text-white">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <svg class="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div class="ml-6">
+                <h1 class="text-3xl font-bold">Strategy Generated Successfully! 🎉</h1>
+                <p class="text-xl mt-2 opacity-90">Your custom {{ strategy.indicator }} trading strategy is ready to use.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strategy Summary -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Strategy Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                <h3 class="font-medium text-blue-900 dark:text-blue-300">Entry Condition</h3>
+                <p class="text-blue-700 dark:text-blue-400 mt-1">{{ strategy.indicator }} {{ strategy.operator }} {{ strategy.value }}</p>
+            </div>
+            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4">
+                <h3 class="font-medium text-red-900 dark:text-red-300">Stop Loss</h3>
+                <p class="text-red-700 dark:text-red-400 mt-1">{{ strategy.stop_loss }}%</p>
+            </div>
+            <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
+                <h3 class="font-medium text-green-900 dark:text-green-300">Profit Target</h3>
+                <p class="text-green-700 dark:text-green-400 mt-1">{{ strategy.target }}%</p>
+            </div>
+            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
+                <h3 class="font-medium text-purple-900 dark:text-purple-300">Capital</h3>
+                <p class="text-purple-700 dark:text-purple-400 mt-1">₹{{ "{:,}".format(strategy.capital|int) }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Code -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Generated Python Strategy Code</h2>
+            <button onclick="copyToClipboard()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200 shadow-lg hover:shadow-xl">
+                📋 Copy Code
+            </button>
+        </div>
+        
+        <div class="bg-gray-900 rounded-lg p-6 overflow-x-auto">
+            <pre id="strategy-code" class="text-green-400 text-sm font-mono leading-relaxed whitespace-pre-wrap">{{ generated_code }}</pre>
+        </div>
+        
+        <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+            <h3 class="font-medium text-blue-900 dark:text-blue-300 mb-2">💡 Next Steps:</h3>
+            <ul class="text-blue-800 dark:text-blue-400 text-sm space-y-1">
+                <li>• Copy the code above and save it as a .py file</li>
+                <li>• Install required packages: pandas, numpy, talib</li>
+                <li>• Test with your own market data</li>
+                <li>• Backtest thoroughly before live trading</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/api/builder/" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-lg font-semibold text-center transition duration-200 transform hover:scale-105 shadow-lg">
+            🚀 Create Another Strategy
+        </a>
+        <a href="/dashboard" class="bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-8 py-4 rounded-lg font-semibold text-center transition duration-200 shadow-lg">
+            📊 Back to Dashboard
+        </a>
+        <a href="/docs" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg font-semibold text-center transition duration-200 shadow-lg">
+            📚 API Documentation
+        </a>
+    </div>
+</div>
+
+<script>
+    function copyToClipboard() {
+        const codeElement = document.getElementById('strategy-code');
+        const textArea = document.createElement('textarea');
+        textArea.value = codeElement.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Show feedback
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '✅ Copied!';
+        button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        button.classList.add('bg-green-600', 'hover:bg-green-700');
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('bg-green-600', 'hover:bg-green-700');
+            button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 3000);
+    }
+</script>
+{% endblock %}
