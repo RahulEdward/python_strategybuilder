@@ -10,275 +10,460 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        gray: {
-                            750: '#374151',
-                        }
+                    backgroundImage: {
+                        'dot-grid': 'radial-gradient(circle, rgb(71 85 105 / 0.3) 1px, transparent 1px)',
+                        'dot-grid-light': 'radial-gradient(circle, rgb(148 163 184 / 0.2) 1px, transparent 1px)'
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="h-full bg-gray-100 dark:bg-gray-900">
-    <!-- Main Container with Sidebar -->
-    <div class="min-h-screen flex">
-        <!-- Sidebar -->
-        <div class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-            <!-- Header -->
-            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                <div class="flex items-center">
-                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Strategy Builder</h1>
-                    <button onclick="toggleTheme()" class="ml-auto p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<body class="h-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="flex h-full">
+        <!-- Fixed Left Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-20 w-64 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 lg:translate-x-0">
+            <div class="flex flex-col h-full">
+                <!-- Logo/Brand -->
+                <div class="flex items-center justify-between h-16 border-b border-gray-200 dark:border-gray-700 px-4">
+                    <h1 class="text-xl font-bold text-gray-900 dark:text-white">Strategy Builder</h1>
+                    
+                    <!-- Theme toggle button -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
                     </button>
                 </div>
-            </div>
-            
-            <!-- Navigation Menu -->
-            <nav class="flex-1 py-4">
-                <div class="space-y-1 px-4">
-                    <a href="/dashboard" class="flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                        </svg>
-                        Dashboard
-                    </a>
-                    
-                    <a href="/create-strategy" class="flex items-center px-3 py-2 text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                        Create Strategy
-                    </a>
-                    
-                    <a href="/strategies" class="flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                        My Strategies
-                    </a>
-                    
-                    <a href="/sessions" class="flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                        Sessions
-                    </a>
-                    
-                    <a href="/settings" class="flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        Settings
-                    </a>
-                </div>
-            </nav>
-            
-            <!-- Bottom Logout -->
-            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-                <a href="/logout" class="flex items-center px-3 py-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                    </svg>
-                    Logout
-                </a>
-            </div>
-        </div>
-        
-        <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col bg-gray-600">
-            <!-- Navigation Tabs -->
-            <div class="bg-gray-700 border-b border-gray-600">
-                <div class="flex">
-                    <button class="px-4 py-3 text-sm font-medium bg-gray-600 text-white border-r border-gray-500">
-                        Open Trade
-                    </button>
-                    <button class="px-4 py-3 text-sm font-medium bg-gray-700 text-gray-300 border-r border-gray-500 hover:bg-gray-600 transition-colors">
-                        Close Trade
-                    </button>
-                    <button class="px-4 py-3 text-sm font-medium bg-gray-700 text-gray-300 border-r border-gray-500 hover:bg-gray-600 transition-colors">
-                        Common
-                    </button>
-                    <button class="px-4 py-3 text-sm font-medium bg-gray-700 text-gray-300 border-r border-gray-500 hover:bg-gray-600 transition-colors">
-                        Money Management
-                    </button>
-                    <button class="px-4 py-3 text-sm font-medium bg-gray-700 text-gray-300 border-r border-gray-500 hover:bg-gray-600 transition-colors">
-                        Alerts
-                    </button>
-                    <button class="px-4 py-3 text-sm font-medium bg-gray-700 text-gray-300 border-r border-gray-500 hover:bg-gray-600 transition-colors">
-                        Inputs
-                    </button>
-                    <button class="px-4 py-3 text-sm font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors">
-                        Source
-                    </button>
-                </div>
-            </div>
-
-            <!-- Strategy Builder Form -->
-            <div class="flex-1 p-6">
-                <form method="POST" action="/api/builder/" class="space-y-6">
-                    <!-- Open Buy Order -->
-                    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden shadow-lg">
-                        <div class="bg-blue-600 px-6 py-3 flex items-center justify-between">
-                            <span class="text-white font-medium">Open Buy Order</span>
-                            <div class="flex items-center space-x-2 text-white text-sm">
-                                <span>SL</span>
-                                <span>TP</span>
-                                <span>100%</span>
-                                <div class="flex items-center space-x-1">
-                                    <div class="w-4 h-4 bg-white bg-opacity-30 rounded flex items-center justify-center">
-                                        <div class="w-2 h-2 bg-white rounded-full"></div>
-                                    </div>
-                                    <span>BO</span>
-                                    <button type="button" class="w-4 h-4 bg-white bg-opacity-30 rounded flex items-center justify-center hover:bg-opacity-50 transition-colors">
-                                        <svg class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 8 8">
-                                            <rect x="1" y="3" width="6" height="2"/>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="w-4 h-4 bg-white bg-opacity-30 rounded flex items-center justify-center hover:bg-opacity-50 transition-colors">
-                                        <svg class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 8 8">
-                                            <path d="M2 1v6l4-3z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="p-6 bg-gray-750">
-                            <div class="grid grid-cols-3 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-gray-400 text-sm mb-2">Technical Indicator</label>
-                                    <select name="indicator" required class="w-full px-3 py-3 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:border-blue-500 transition-colors">
-                                        <option value="">Choose an indicator...</option>
-                                        <option value="RSI">RSI (Relative Strength Index)</option>
-                                        <option value="EMA">EMA (Exponential Moving Average)</option>
-                                        <option value="SMA">SMA (Simple Moving Average)</option>
-                                        <option value="MACD">MACD (Moving Average Convergence Divergence)</option>
-                                        <option value="Bollinger_Bands">Bollinger Bands</option>
-                                        <option value="Stochastic">Stochastic Oscillator</option>
-                                        <option value="Williams_R">Williams %R</option>
-                                        <option value="CCI">CCI (Commodity Channel Index)</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-400 text-sm mb-2">Condition</label>
-                                    <select name="operator" required class="w-full px-3 py-3 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:border-blue-500 transition-colors">
-                                        <option value="">Select condition...</option>
-                                        <option value=">">Greater than (>)</option>
-                                        <option value="<">Less than (<)</option>
-                                        <option value="==">Equal to (==)</option>
-                                        <option value=">=">Greater than or equal (>=)</option>
-                                        <option value="<=">Less than or equal (<=)</option>
-                                        <option value="crosses_above">Crosses Above</option>
-                                        <option value="crosses_below">Crosses Below</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-400 text-sm mb-2">Threshold Value</label>
-                                    <input type="number" name="value" step="0.01" required placeholder="e.g., 70, 30, 0.5" class="w-full px-3 py-3 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors">
-                                </div>
-                            </div>
-                            
-                            <button type="button" class="text-blue-400 text-sm hover:text-blue-300 font-medium transition-colors">
-                                Add condition
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- New Buy Order Link -->
-                    <div class="text-center">
-                        <button type="button" class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
-                            New Buy Order
-                        </button>
-                    </div>
-                    
-                    <!-- Open Sell Order -->
-                    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden shadow-lg">
-                        <div class="bg-red-700 px-6 py-3 flex items-center justify-between">
-                            <span class="text-white font-medium">Open Sell Order</span>
-                            <div class="flex items-center space-x-2 text-white text-sm">
-                                <span>SL</span>
-                                <span>TP</span>
-                                <span>100%</span>
-                                <div class="flex items-center space-x-1">
-                                    <div class="w-4 h-4 bg-white bg-opacity-30 rounded flex items-center justify-center">
-                                        <div class="w-2 h-2 bg-white rounded-full"></div>
-                                    </div>
-                                    <span>BO</span>
-                                    <button type="button" class="w-4 h-4 bg-white bg-opacity-30 rounded flex items-center justify-center hover:bg-opacity-50 transition-colors">
-                                        <svg class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 8 8">
-                                            <rect x="1" y="3" width="6" height="2"/>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="w-4 h-4 bg-white bg-opacity-30 rounded flex items-center justify-center hover:bg-opacity-50 transition-colors">
-                                        <svg class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 8 8">
-                                            <path d="M2 1v6l4-3z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="p-6 bg-gray-750">
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-gray-400 text-sm mb-2">Stop Loss (%)</label>
-                                    <input type="number" name="stop_loss" step="0.1" min="0" max="100" required placeholder="e.g., 2.5" class="w-full px-3 py-3 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors">
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-gray-400 text-sm mb-2">Profit Target (%)</label>
-                                    <input type="number" name="target" step="0.1" min="0" required placeholder="e.g., 5.0" class="w-full px-3 py-3 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors">
-                                </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label class="block text-gray-400 text-sm mb-2">Trading Capital (₹)</label>
-                                <input type="number" name="capital" step="1" min="1000" required placeholder="e.g., 100000" class="w-full px-3 py-3 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors">
-                                <p class="mt-1 text-gray-500 text-sm">Minimum capital required: ₹1,000</p>
-                            </div>
-                            
-                            <button type="button" class="text-red-400 text-sm hover:text-red-300 font-medium transition-colors">
-                                Add condition
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- New Sell Order Link -->
-                    <div class="text-center">
-                        <button type="button" class="text-red-400 hover:text-red-300 text-sm font-medium transition-colors">
-                            New Sell Order
-                        </button>
-                    </div>
-                    
-                    <!-- Action Buttons -->
-                    <div class="flex space-x-4 pt-6">
-                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
-                            Generate Strategy Code
-                        </button>
-                        <button type="reset" class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-sm">
-                            Reset Form
-                        </button>
-                    </div>
-                </form>
                 
-                <!-- Footer Links -->
-                <div class="mt-8 flex justify-center space-x-8 text-gray-400 text-sm">
-                    <a href="/dashboard" class="hover:text-blue-400 transition-colors">← Back to Dashboard</a>
-                    <a href="/docs" class="hover:text-gray-300 transition-colors">API Documentation</a>
-                    <a href="/health" class="hover:text-gray-300 transition-colors">System Health</a>
+                <!-- Navigation Links -->
+                <nav class="flex-1 pt-6 pb-4 px-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="/dashboard" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/api/builder/" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Create Strategy
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/strategies" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                My Strategies
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/sessions" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                Sessions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/settings" class="nav-link flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <!-- Logout Button -->
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <button onclick="handleLogout()" class="flex w-full items-center px-4 py-3 text-sm font-medium rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Logout
+                    </button>
                 </div>
             </div>
-        </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="mainContent" class="flex-1 transition-all duration-300 lg:ml-64">
+            <!-- Strategy Builder Content - NO TOP NAV BAR -->
+            <div class="bg-dot-grid-light dark:bg-dot-grid bg-[length:20px_20px] min-h-screen p-6">
+                <div class="max-w-7xl mx-auto">
+                    
+                    <!-- Tab Navigation -->
+                    <div class="mb-6">
+                        <div class="border-b border-gray-200 dark:border-gray-700">
+                            <nav class="-mb-px flex space-x-8 overflow-x-auto">
+                                <button type="button" onclick="switchTab('open-trade')" class="tab-button active whitespace-nowrap py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600 dark:text-blue-400" data-tab="open-trade">
+                                    Open Trade
+                                </button>
+                                <button type="button" onclick="switchTab('close-trade')" class="tab-button whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300" data-tab="close-trade">
+                                    Close Trade
+                                </button>
+                                <button type="button" onclick="switchTab('common')" class="tab-button whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300" data-tab="common">
+                                    Common
+                                </button>
+                                <button type="button" onclick="switchTab('money-mgmt')" class="tab-button whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300" data-tab="money-mgmt">
+                                    Money Management
+                                </button>
+                                <button type="button" onclick="switchTab('alerts')" class="tab-button whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300" data-tab="alerts">
+                                    Alerts
+                                </button>
+                                <button type="button" onclick="switchTab('inputs')" class="tab-button whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300" data-tab="inputs">
+                                    Inputs
+                                </button>
+                                <button type="button" onclick="switchTab('source')" class="tab-button whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300" data-tab="source">
+                                    Source
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <!-- Open Trade Tab -->
+                    <div id="open-trade" class="tab-content">
+                        <form method="POST" action="/api/builder/" class="space-y-6">
+                            
+                            <!-- Buy Orders Section -->
+                            <div id="buyOrdersContainer" class="space-y-4">
+                                <!-- Open Buy Order 1 -->
+                                <div class="order-block bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                                    <!-- Header -->
+                                    <div class="bg-blue-600 dark:bg-blue-700 px-4 py-3 flex items-center justify-between">
+                                        <span class="text-white font-medium">Open Buy Order</span>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex items-center space-x-2 text-white text-xs">
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">SL</span>
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">TP</span>
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">100%</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <button type="button" class="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 8 8">
+                                                        <circle cx="4" cy="4" r="2"/>
+                                                    </svg>
+                                                </button>
+                                                <button type="button" onclick="toggleOrderVisibility(this)" class="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 8 8">
+                                                        <rect x="1" y="3" width="6" height="2"/>
+                                                    </svg>
+                                                </button>
+                                                <button type="button" onclick="removeOrder(this)" class="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 8 8">
+                                                        <path d="M1.5 1.5l5 5m0-5l-5 5"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Content -->
+                                    <div class="order-content p-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Technical Indicator</label>
+                                                <select name="buy_indicator[]" required class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                                    <option value="">Choose an indicator...</option>
+                                                    <option value="RSI">RSI (Relative Strength Index)</option>
+                                                    <option value="EMA">EMA (Exponential Moving Average)</option>
+                                                    <option value="SMA">SMA (Simple Moving Average)</option>
+                                                    <option value="MACD">MACD (Moving Average Convergence Divergence)</option>
+                                                    <option value="Bollinger_Bands">Bollinger Bands</option>
+                                                    <option value="Stochastic">Stochastic Oscillator</option>
+                                                    <option value="Williams_R">Williams %R</option>
+                                                    <option value="CCI">CCI (Commodity Channel Index)</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Condition</label>
+                                                <select name="buy_operator[]" required class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                                    <option value="">Select condition...</option>
+                                                    <option value=">">Greater than (>)</option>
+                                                    <option value="<">Less than (<)</option>
+                                                    <option value="==">Equal to (==)</option>
+                                                    <option value=">=">Greater than or equal (>=)</option>
+                                                    <option value="<=">Less than or equal (<=)</option>
+                                                    <option value="crosses_above">Crosses Above</option>
+                                                    <option value="crosses_below">Crosses Below</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Threshold Value</label>
+                                                <input type="number" name="buy_value[]" step="0.01" required placeholder="e.g., 70, 30, 0.5" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                            </div>
+                                        </div>
+                                        
+                                        <button type="button" onclick="addCondition(this, 'buy')" class="text-blue-600 dark:text-blue-400 text-sm hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors">
+                                            + Add condition
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Add New Buy Order Button -->
+                            <div class="text-center">
+                                <button type="button" onclick="addNewOrder('buy')" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium transition-colors border border-blue-600 dark:border-blue-400 hover:border-blue-700 dark:hover:border-blue-300 px-4 py-2 rounded-md">
+                                    + New Buy Order
+                                </button>
+                            </div>
+                            
+                            <!-- Sell Orders Section -->
+                            <div id="sellOrdersContainer" class="space-y-4">
+                                <!-- Open Sell Order 1 -->
+                                <div class="order-block bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                                    <!-- Header -->
+                                    <div class="bg-red-600 dark:bg-red-700 px-4 py-3 flex items-center justify-between">
+                                        <span class="text-white font-medium">Open Sell Order</span>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex items-center space-x-2 text-white text-xs">
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">SL</span>
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">TP</span>
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">100%</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <button type="button" class="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 8 8">
+                                                        <circle cx="4" cy="4" r="2"/>
+                                                    </svg>
+                                                </button>
+                                                <button type="button" onclick="toggleOrderVisibility(this)" class="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 8 8">
+                                                        <rect x="1" y="3" width="6" height="2"/>
+                                                    </svg>
+                                                </button>
+                                                <button type="button" onclick="removeOrder(this)" class="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 8 8">
+                                                        <path d="M1.5 1.5l5 5m0-5l-5 5"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Content -->
+                                    <div class="order-content p-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stop Loss (%)</label>
+                                                <input type="number" name="sell_stop_loss[]" step="0.1" min="0" max="100" required placeholder="e.g., 2.5" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors">
+                                            </div>
+                                            
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profit Target (%)</label>
+                                                <input type="number" name="sell_target[]" step="0.1" min="0" required placeholder="e.g., 5.0" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Trading Capital (₹)</label>
+                                            <input type="number" name="sell_capital[]" step="1" min="1000" required placeholder="e.g., 100000" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors">
+                                            <p class="mt-1 text-gray-500 dark:text-gray-400 text-xs">Minimum capital required: ₹1,000</p>
+                                        </div>
+                                        
+                                        <button type="button" onclick="addCondition(this, 'sell')" class="text-red-600 dark:text-red-400 text-sm hover:text-red-700 dark:hover:text-red-300 font-medium transition-colors">
+                                            + Add condition
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Add New Sell Order Button -->
+                            <div class="text-center">
+                                <button type="button" onclick="addNewOrder('sell')" class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium transition-colors border border-red-600 dark:border-red-400 hover:border-red-700 dark:hover:border-red-300 px-4 py-2 rounded-md">
+                                    + New Sell Order
+                                </button>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                    Generate Strategy Code
+                                </button>
+                                <button type="reset" onclick="resetForm()" class="bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                    Reset Form
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Close Trade Tab -->
+                    <div id="close-trade" class="tab-content hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Close Trade Conditions</h3>
+                            <form class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Close Condition</label>
+                                        <select class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                            <option value="">Select close condition...</option>
+                                            <option value="profit_target">Profit Target Hit</option>
+                                            <option value="stop_loss">Stop Loss Hit</option>
+                                            <option value="time_based">Time-based Exit</option>
+                                            <option value="indicator_signal">Indicator Signal</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Value</label>
+                                        <input type="number" step="0.1" placeholder="Enter value" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Common Tab -->
+                    <div id="common" class="tab-content hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Common Settings</h3>
+                            <form class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Strategy Name</label>
+                                        <input type="text" placeholder="Enter strategy name" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timeframe</label>
+                                        <select class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                            <option value="1m">1 Minute</option>
+                                            <option value="5m">5 Minutes</option>
+                                            <option value="15m">15 Minutes</option>
+                                            <option value="1h">1 Hour</option>
+                                            <option value="4h">4 Hours</option>
+                                            <option value="1d" selected>1 Day</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Money Management Tab -->
+                    <div id="money-mgmt" class="tab-content hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Money Management</h3>
+                            <form class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Position Size (%)</label>
+                                        <input type="number" step="0.1" min="0" max="100" placeholder="e.g., 10" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Risk (%)</label>
+                                        <input type="number" step="0.1" min="0" max="100" placeholder="e.g., 2" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Positions</label>
+                                        <input type="number" min="1" placeholder="e.g., 5" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Alerts Tab -->
+                    <div id="alerts" class="tab-content hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Alert Settings</h3>
+                            <form class="space-y-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="email-alerts" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="email-alerts" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Email Alerts</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="sms-alerts" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="sms-alerts" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">SMS Alerts</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="webhook-alerts" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="webhook-alerts" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Webhook Notifications</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Webhook URL</label>
+                                    <input type="url" placeholder="https://your-webhook-url.com" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Inputs Tab -->
+                    <div id="inputs" class="tab-content hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Strategy Inputs</h3>
+                            <form class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">RSI Period</label>
+                                        <input type="number" min="1" value="14" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">EMA Period</label>
+                                        <input type="number" min="1" value="20" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Source Tab -->
+                    <div id="source" class="tab-content hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Generated Source Code</h3>
+                            <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 mb-4">
+                                <pre class="text-green-400 text-sm font-mono overflow-x-auto whitespace-pre-wrap"><code id="sourceCode">// Generated strategy code will appear here
+//@version=5
+strategy("My Trading Strategy", overlay=true)
+
+// Click "Generate Strategy Code" to see the output</code></pre>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button type="button" onclick="copyToClipboard()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors">
+                                    Copy Code
+                                </button>
+                                <button type="button" onclick="downloadCode()" class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors">
+                                    Download .pine
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer Links -->
+                    <div class="mt-8 flex flex-wrap justify-center gap-6 text-gray-500 dark:text-gray-400 text-xs border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <a href="/dashboard" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">← Back to Dashboard</a>
+                        <a href="/docs" class="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">API Documentation</a>
+                        <a href="/health" class="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">System Health</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div id="sidebarOverlay" class="fixed inset-0 z-10 bg-black bg-opacity-50 lg:hidden hidden" onclick="toggleSidebar()"></div>
     </div>
 
     <script>
+        let sidebarOpen = window.innerWidth >= 1024;
+        let buyOrderCount = 1;
+        let sellOrderCount = 1;
+
+        // Theme toggle functionality
         function toggleTheme() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
@@ -290,11 +475,242 @@
             }
         }
 
-        // Load saved theme
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
+        // Sidebar toggle functionality - NO TOP NAV BUTTON
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebarOpen = !sidebarOpen;
+            
+            if (window.innerWidth < 1024) {
+                // Mobile behavior
+                if (sidebarOpen) {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.remove('hidden');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                }
+            } else {
+                // Desktop behavior
+                if (sidebarOpen) {
+                    sidebar.classList.remove('-translate-x-full');
+                    mainContent.classList.add('lg:ml-64');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    mainContent.classList.remove('lg:ml-64');
+                }
+            }
         }
+
+        // Tab switching functionality - FIXED
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+                button.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+            });
+            
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.remove('hidden');
+            }
+            
+            // Add active class to clicked button
+            const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
+            if (activeButton) {
+                activeButton.classList.add('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+                activeButton.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+            }
+        }
+
+        // Add new order functionality
+        function addNewOrder(type) {
+            const container = type === 'buy' ? document.getElementById('buyOrdersContainer') : document.getElementById('sellOrdersContainer');
+            const color = type === 'buy' ? 'blue' : 'red';
+            
+            const orderHTML = `
+                <div class="order-block bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-${color}-600 dark:bg-${color}-700 px-4 py-3 flex items-center justify-between">
+                        <span class="text-white font-medium">Open ${type.charAt(0).toUpperCase() + type.slice(1)} Order</span>
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-2 text-white text-xs">
+                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">SL</span>
+                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">TP</span>
+                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded">100%</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <button type="button" onclick="removeOrder(this)" class="w-6 h-6 bg-white bg-opacity-20 rounded flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 8 8">
+                                        <path d="M1.5 1.5l5 5m0-5l-5 5"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-content p-6">
+                        ${type === 'buy' ? getBuyOrderContent() : getSellOrderContent()}
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', orderHTML);
+        }
+
+        function getBuyOrderContent() {
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Technical Indicator</label>
+                        <select name="buy_indicator[]" required class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                            <option value="">Choose an indicator...</option>
+                            <option value="RSI">RSI (Relative Strength Index)</option>
+                            <option value="EMA">EMA (Exponential Moving Average)</option>
+                            <option value="SMA">SMA (Simple Moving Average)</option>
+                            <option value="MACD">MACD (Moving Average Convergence Divergence)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Condition</label>
+                        <select name="buy_operator[]" required class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                            <option value="">Select condition...</option>
+                            <option value=">">Greater than (>)</option>
+                            <option value="<">Less than (<)</option>
+                            <option value="crosses_above">Crosses Above</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Threshold Value</label>
+                        <input type="number" name="buy_value[]" step="0.01" required placeholder="e.g., 70" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                    </div>
+                </div>
+            `;
+        }
+
+        function getSellOrderContent() {
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stop Loss (%)</label>
+                        <input type="number" name="sell_stop_loss[]" step="0.1" min="0" max="100" required placeholder="e.g., 2.5" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profit Target (%)</label>
+                        <input type="number" name="sell_target[]" step="0.1" min="0" required placeholder="e.g., 5.0" class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors">
+                    </div>
+                </div>
+            `;
+        }
+
+        // Other functions
+        function addCondition(button, type) {
+            // Add condition functionality
+        }
+
+        function toggleOrderVisibility(button) {
+            const orderContent = button.closest('.order-block').querySelector('.order-content');
+            orderContent.classList.toggle('hidden');
+        }
+
+        function removeOrder(button) {
+            const orderBlock = button.closest('.order-block');
+            orderBlock.remove();
+        }
+
+        function resetForm() {
+            document.querySelector('form').reset();
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/api/auth/logout';
+            }
+        }
+
+        function copyToClipboard() {
+            const sourceCode = document.getElementById('sourceCode').textContent;
+            navigator.clipboard.writeText(sourceCode).then(() => {
+                alert('Code copied to clipboard!');
+            });
+        }
+
+        function downloadCode() {
+            const sourceCode = document.getElementById('sourceCode').textContent;
+            const blob = new Blob([sourceCode], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'trading_strategy.pine';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme initialization
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+
+            // Sidebar initialization
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (window.innerWidth < 1024) {
+                sidebarOpen = false;
+                sidebar.classList.add('-translate-x-full');
+            } else {
+                sidebarOpen = true;
+                sidebar.classList.remove('-translate-x-full');
+                mainContent.classList.add('lg:ml-64');
+            }
+            
+            // Initialize first tab
+            switchTab('open-trade');
+            
+            // Form submission
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Form submitted! Check the Source tab for generated code.');
+                    switchTab('source');
+                });
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth >= 1024) {
+                overlay.classList.add('hidden');
+                if (sidebarOpen) {
+                    sidebar.classList.remove('-translate-x-full');
+                    mainContent.classList.add('lg:ml-64');
+                }
+            } else {
+                mainContent.classList.remove('lg:ml-64');
+                if (!sidebarOpen) {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                }
+            }
+        });
     </script>
 </body>
 </html>
