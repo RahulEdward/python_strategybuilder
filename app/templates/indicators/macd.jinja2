@@ -1,0 +1,20 @@
+# MACD (Moving Average Convergence Divergence) Calculation
+macd_fast = {{ fast | default(12) }}
+macd_slow = {{ slow | default(26) }}
+macd_signal = {{ signal | default(9) }}
+
+macd_line, macd_signal_line, macd_histogram = talib.MACD(
+    data['{{ source | default("close") }}'].values, 
+    fastperiod=macd_fast, 
+    slowperiod=macd_slow, 
+    signalperiod=macd_signal
+)
+
+data['macd_line'] = macd_line
+data['macd_signal'] = macd_signal_line
+data['macd_histogram'] = macd_histogram
+
+# Handle NaN values
+data['macd_line'].fillna(0, inplace=True)
+data['macd_signal'].fillna(0, inplace=True)
+data['macd_histogram'].fillna(0, inplace=True)

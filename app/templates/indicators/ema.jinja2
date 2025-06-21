@@ -1,0 +1,6 @@
+# EMA (Exponential Moving Average) Calculation
+ema_period = {{ period | default(20) }}
+data['ema_{{ period | default(20) }}'] = talib.EMA(data['{{ source | default("close") }}'].values, timeperiod=ema_period)
+
+# Handle NaN values
+data['ema_{{ period | default(20) }}'].fillna(method='bfill', inplace=True)

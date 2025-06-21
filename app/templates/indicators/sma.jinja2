@@ -1,0 +1,6 @@
+# SMA (Simple Moving Average) Calculation
+sma_period = {{ period | default(50) }}
+data['sma_{{ period | default(50) }}'] = talib.SMA(data['{{ source | default("close") }}'].values, timeperiod=sma_period)
+
+# Handle NaN values
+data['sma_{{ period | default(50) }}'].fillna(method='bfill', inplace=True)

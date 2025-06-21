@@ -1,0 +1,6 @@
+# RSI (Relative Strength Index) Calculation
+rsi_period = {{ period | default(14) }}
+data['rsi_{{ period | default(14) }}'] = talib.RSI(data['{{ source | default("close") }}'].values, timeperiod=rsi_period)
+
+# Handle NaN values
+data['rsi_{{ period | default(14) }}'].fillna(50, inplace=True)

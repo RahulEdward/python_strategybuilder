@@ -1,6 +1,6 @@
 """
 FastAPI Strategy Builder SaaS App Entry Point
-Fixed Version - No Syntax Errors
+Enhanced Version with Strategy Builder Integration
 """
 from fastapi import FastAPI, Request, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -56,6 +56,21 @@ except ImportError as e:
     async def get_current_user_optional():
         return None
 
+# Import strategy builder components
+try:
+    from app.parser import StrategyParser
+    from app.generator import CodeGenerator
+    from app.models.models import StrategyRequest, GeneratedStrategy, StrategyResponse
+    strategy_parser = StrategyParser()
+    code_generator = CodeGenerator()
+    strategy_builder_available = True
+    logging.info("Strategy builder components loaded successfully")
+except ImportError as e:
+    logging.warning(f"Strategy builder components not available: {e}")
+    strategy_parser = None
+    code_generator = None
+    strategy_builder_available = False
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -89,7 +104,7 @@ initialize_database()
 # Create FastAPI app
 app = FastAPI(
     title="Strategy Builder SaaS",
-    description="A powerful trading strategy builder platform",
+    description="A powerful trading strategy builder platform with no-code visual interface",
     version="1.0.0",
     docs_url="/docs" if getattr(settings, 'debug', True) else None,
     redoc_url="/redoc" if getattr(settings, 'debug', True) else None,
@@ -224,10 +239,10 @@ async def favicon():
     
     return Response(status_code=204)
 
-# Health endpoint
+# Enhanced health endpoint with strategy builder status
 @app.get("/health")
 async def health_check():
-    """Application health check"""
+    """Application health check with strategy builder status"""
     try:
         if engine:
             with engine.connect() as connection:
@@ -239,13 +254,30 @@ async def health_check():
         logger.error(f"Database health check failed: {str(e)}")
         db_status = "disconnected"
     
+    # Check strategy builder components
+    strategy_builder_status = {
+        "available": strategy_builder_available,
+        "parser": strategy_parser is not None,
+        "generator": code_generator is not None,
+        "templates": "unknown"
+    }
+    
+    if code_generator:
+        try:
+            template_status = code_generator.validate_templates()
+            strategy_builder_status["templates"] = "loaded" if any(template_status.values()) else "missing"
+            strategy_builder_status["template_details"] = template_status
+        except Exception as e:
+            strategy_builder_status["templates"] = f"error: {str(e)}"
+    
     return {
         "status": "healthy" if db_status == "connected" else "degraded",
         "application": "Strategy Builder SaaS",
         "version": "1.0.0",
         "database": db_status,
         "timestamp": datetime.utcnow().isoformat(),
-        "templates": "loaded" if templates else "not_loaded"
+        "templates": "loaded" if templates else "not_loaded",
+        "strategy_builder": strategy_builder_status
     }
 
 # API status endpoint
@@ -256,13 +288,157 @@ async def api_status():
         "status": "online",
         "timestamp": datetime.utcnow().isoformat(),
         "version": "1.0.0",
-        "service": "Strategy Builder API"
+        "service": "Strategy Builder API",
+        "strategy_builder_available": strategy_builder_available
     })
+
+# Strategy Builder API endpoints (integrated into main app)
+if strategy_builder_available:
+    
+    @app.post("/api/strategy/generate")
+    async def generate_strategy_direct(
+        strategy_request: StrategyRequest,
+        current_user = Depends(get_current_user_optional),
+        db: Session = Depends(get_db)
+    ):
+        """Generate strategy code from JSON configuration"""
+        try:
+            if not current_user:
+                raise HTTPException(status_code=401, detail="Authentication required")
+            
+            # Validate the strategy
+            validation_result = strategy_parser.validate_strategy(strategy_request)
+            if not validation_result["is_valid"]:
+                return StrategyResponse(
+                    success=False,
+                    message="Strategy validation failed",
+                    errors=validation_result["errors"]
+                )
+            
+            # Parse the strategy
+            parsed_data = strategy_parser.parse_strategy(strategy_request)
+            
+            # Generate code
+            strategy_code = code_generator.generate_strategy(parsed_data)
+            
+            # Prepare response
+            generated_strategy = GeneratedStrategy(
+                strategy_name=parsed_data["strategy_name"],
+                code=strategy_code,
+                indicators_used=parsed_data["indicators_used"],
+                conditions_count={
+                    "buy": len(parsed_data["buy_conditions"]),
+                    "sell": len(parsed_data["sell_conditions"])
+                }
+            )
+            
+            # Save to database if available
+            if db:
+                try:
+                    from models.strategy import Strategy
+                    
+                    db_strategy = Strategy.create_advanced_strategy(
+                        user_id=current_user.id,
+                        name=parsed_data["strategy_name"],
+                        description=f"Auto-generated strategy with {len(parsed_data['indicators_used'])} indicators",
+                        timeframe=str(parsed_data["timeframe"]),
+                        buy_conditions=parsed_data["buy_conditions"],
+                        sell_conditions=parsed_data["sell_conditions"],
+                        money_management=parsed_data["money_management"],
+                        indicators_used=parsed_data["indicators_used"],
+                        generated_code=strategy_code,
+                        capital=parsed_data["money_management"].get("initial_capital", 100000)
+                    )
+                    
+                    db.add(db_strategy)
+                    db.commit()
+                    db.refresh(db_strategy)
+                    
+                    logger.info(f"Strategy saved to database with ID: {db_strategy.id}")
+                    
+                except Exception as db_error:
+                    logger.error(f"Failed to save strategy to database: {str(db_error)}")
+                    # Continue without database save
+            
+            return StrategyResponse(
+                success=True,
+                message="Strategy generated successfully",
+                strategy=generated_strategy
+            )
+            
+        except Exception as e:
+            logger.error(f"Strategy generation failed: {str(e)}")
+            return StrategyResponse(
+                success=False,
+                message=f"Code generation failed: {str(e)}",
+                errors=[str(e)]
+            )
+    
+    @app.get("/api/strategy/indicators")
+    async def list_indicators():
+        """List available indicators"""
+        try:
+            indicators = [
+                {"name": "RSI", "description": "Relative Strength Index", "parameters": ["period"], "default_values": {"period": 14}},
+                {"name": "EMA", "description": "Exponential Moving Average", "parameters": ["period"], "default_values": {"period": 20}},
+                {"name": "SMA", "description": "Simple Moving Average", "parameters": ["period"], "default_values": {"period": 50}},
+                {"name": "MACD", "description": "Moving Average Convergence Divergence", "parameters": ["fast", "slow", "signal"], "default_values": {"fast": 12, "slow": 26, "signal": 9}},
+                {"name": "BB", "description": "Bollinger Bands", "parameters": ["period", "std"], "default_values": {"period": 20, "std": 2}},
+                {"name": "STOCH", "description": "Stochastic Oscillator", "parameters": ["k_period", "d_period", "smooth"], "default_values": {"k_period": 14, "d_period": 3, "smooth": 3}},
+                {"name": "CCI", "description": "Commodity Channel Index", "parameters": ["period"], "default_values": {"period": 20}},
+                {"name": "WILLIAMS", "description": "Williams %R", "parameters": ["period"], "default_values": {"period": 14}}
+            ]
+            
+            operators = [
+                {"name": "above", "symbol": ">", "description": "Greater than", "type": "comparison"},
+                {"name": "below", "symbol": "<", "description": "Less than", "type": "comparison"},
+                {"name": "equal", "symbol": "==", "description": "Equal to", "type": "comparison"},
+                {"name": "crosses_above", "symbol": "crossover", "description": "Crosses above", "type": "cross"},
+                {"name": "crosses_below", "symbol": "crossunder", "description": "Crosses below", "type": "cross"}
+            ]
+            
+            return {
+                "indicators": indicators,
+                "operators": operators,
+                "timeframes": ["1m", "5m", "15m", "30m", "1h", "4h", "1d", "1w"],
+                "available_templates": code_generator.get_available_templates() if code_generator else []
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to list indicators: {str(e)}")
+            raise HTTPException(status_code=500, detail="Failed to retrieve indicators")
+    
+    @app.post("/api/strategy/validate")
+    async def validate_strategy_endpoint(strategy_request: StrategyRequest):
+        """Validate strategy configuration without generating code"""
+        try:
+            validation_result = strategy_parser.validate_strategy(strategy_request)
+            
+            # Count unique indicators
+            all_indicators = []
+            for cond in strategy_request.buy_conditions + strategy_request.sell_conditions:
+                all_indicators.extend([cond.left.indicator.value, cond.right.indicator.value])
+            
+            unique_indicators = len(set([ind for ind in all_indicators if ind != "CUSTOM"]))
+            
+            return {
+                "is_valid": validation_result["is_valid"],
+                "errors": validation_result["errors"],
+                "warnings": validation_result["warnings"],
+                "indicators_count": unique_indicators,
+                "conditions_count": {
+                    "buy": len(strategy_request.buy_conditions),
+                    "sell": len(strategy_request.sell_conditions)
+                }
+            }
+        except Exception as e:
+            logger.error(f"Strategy validation failed: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Validation failed: {str(e)}")
 
 # Main routes
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request, current_user = Depends(get_current_user_optional)):
-    """Home page"""
+    """Home page with strategy builder highlights"""
     try:
         if current_user:
             username = getattr(current_user, 'username', 'Unknown')
@@ -270,8 +446,28 @@ async def root(request: Request, current_user = Depends(get_current_user_optiona
             return RedirectResponse(url="/dashboard", status_code=302)
         
         if not templates:
+            strategy_builder_section = ""
+            if strategy_builder_available:
+                strategy_builder_section = """
+                    <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin: 20px 0;">
+                        <h2 style="color: white; margin-bottom: 15px; font-size: 1.8em;">🚀 No-Code Strategy Builder</h2>
+                        <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1em; line-height: 1.6;">
+                            Build sophisticated trading strategies with our visual 5-column condition builder. 
+                            No coding required - just drag, drop, and configure your indicators!
+                        </p>
+                        <div style="margin-top: 20px;">
+                            <a href="/login" style="
+                                background: rgba(255, 255, 255, 0.2); color: white; padding: 15px 30px;
+                                text-decoration: none; border-radius: 25px; margin-right: 15px;
+                                border: 2px solid rgba(255, 255, 255, 0.3); display: inline-block;
+                                transition: all 0.3s ease; font-weight: 600;
+                            ">Get Started →</a>
+                        </div>
+                    </div>
+                """
+            
             return HTMLResponse(
-                content="""
+                content=f"""
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -279,32 +475,41 @@ async def root(request: Request, current_user = Depends(get_current_user_optiona
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <style>
-                        body { 
+                        body {{ 
                             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
                             margin: 0; padding: 20px; line-height: 1.6;
                             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                             color: white; min-height: 100vh;
-                        }
-                        .container {
-                            max-width: 800px; margin: 50px auto; text-align: center;
+                        }}
+                        .container {{
+                            max-width: 1000px; margin: 50px auto; text-align: center;
                             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
                             border-radius: 15px; padding: 40px;
-                        }
-                        .header h1 { font-size: 3em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-                        .header p { font-size: 1.2em; opacity: 0.9; }
-                        .nav { margin: 30px 0; }
-                        .nav a { 
+                        }}
+                        .header h1 {{ font-size: 3em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }}
+                        .header p {{ font-size: 1.2em; opacity: 0.9; }}
+                        .nav {{ margin: 30px 0; }}
+                        .nav a {{ 
                             margin: 0 10px; padding: 12px 24px; 
                             background: rgba(255, 255, 255, 0.2); color: white; 
                             text-decoration: none; border-radius: 25px; 
                             border: 2px solid rgba(255, 255, 255, 0.3);
                             transition: all 0.3s ease; display: inline-block;
-                        }
-                        .nav a:hover { 
+                        }}
+                        .nav a:hover {{ 
                             background: rgba(255, 255, 255, 0.3); 
                             transform: translateY(-2px);
                             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                        }
+                        }}
+                        .features {{
+                            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                            gap: 20px; margin: 30px 0; text-align: left;
+                        }}
+                        .feature {{
+                            background: rgba(255, 255, 255, 0.1); border-radius: 10px;
+                            padding: 20px; backdrop-filter: blur(5px);
+                        }}
+                        .feature h3 {{ margin-top: 0; color: #ffffff; }}
                     </style>
                 </head>
                 <body>
@@ -313,8 +518,31 @@ async def root(request: Request, current_user = Depends(get_current_user_optiona
                             <h1>Strategy Builder SaaS</h1>
                             <p>Build powerful algorithmic trading strategies with ease</p>
                         </div>
+                        
+                        {strategy_builder_section}
+                        
+                        <div class="features">
+                            <div class="feature">
+                                <h3>📊 Visual Builder</h3>
+                                <p>Drag-and-drop interface for creating complex trading strategies without coding</p>
+                            </div>
+                            <div class="feature">
+                                <h3>📈 Multiple Indicators</h3>
+                                <p>Support for RSI, EMA, SMA, MACD, Bollinger Bands, and more technical indicators</p>
+                            </div>
+                            <div class="feature">
+                                <h3>⚡ Real-time Testing</h3>
+                                <p>Backtest your strategies with historical data and performance metrics</p>
+                            </div>
+                            <div class="feature">
+                                <h3>🔧 Code Generation</h3>
+                                <p>Automatically generate Python code for your strategies</p>
+                            </div>
+                        </div>
+                        
                         <div class="nav">
                             <a href="/login">Login</a>
+                            <a href="/register">Register</a>
                             <a href="/docs">API Documentation</a>
                             <a href="/health">System Health</a>
                         </div>
@@ -330,7 +558,8 @@ async def root(request: Request, current_user = Depends(get_current_user_optiona
             "user": current_user,
             "app_name": "Strategy Builder SaaS",
             "version": "1.0.0",
-            "year": datetime.now().year
+            "year": datetime.now().year,
+            "strategy_builder_available": strategy_builder_available
         })
         
     except Exception as e:
@@ -352,7 +581,7 @@ async def root(request: Request, current_user = Depends(get_current_user_optiona
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request, current_user = Depends(get_current_user_optional)):
-    """Dashboard page"""
+    """Enhanced dashboard page with strategy builder features"""
     try:
         if not current_user:
             logger.info("Unauthenticated user trying to access dashboard, redirecting to login")
@@ -362,6 +591,13 @@ async def dashboard(request: Request, current_user = Depends(get_current_user_op
         email = getattr(current_user, 'email', 'Unknown')
         
         if not templates:
+            strategy_builder_nav = ""
+            if strategy_builder_available:
+                strategy_builder_nav = """
+                    <a href="/builder" class="primary">🚀 Strategy Builder</a>
+                    <a href="/api/strategy/indicators">📊 View Indicators</a>
+                """
+            
             return HTMLResponse(
                 content=f"""
                 <!DOCTYPE html>
@@ -394,6 +630,16 @@ async def dashboard(request: Request, current_user = Depends(get_current_user_op
                         .nav a:hover {{ background: #0056b3; }}
                         .nav a.primary {{ background: #28a745; }}
                         .nav a.primary:hover {{ background: #1e7e34; }}
+                        .stats {{
+                            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                            gap: 20px; margin: 20px 0;
+                        }}
+                        .stat-card {{
+                            background: white; padding: 20px; border-radius: 10px;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;
+                        }}
+                        .stat-card h3 {{ margin-top: 0; color: #333; }}
+                        .stat-value {{ font-size: 2em; font-weight: bold; color: #007bff; }}
                     </style>
                 </head>
                 <body>
@@ -401,8 +647,27 @@ async def dashboard(request: Request, current_user = Depends(get_current_user_op
                         <h1>Welcome back, {username}!</h1>
                         <p>Email: {email}</p>
                     </div>
+                    
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3>🔧 Strategy Builder</h3>
+                            <div class="stat-value">{"✅" if strategy_builder_available else "❌"}</div>
+                            <p>{"Available" if strategy_builder_available else "Not Available"}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>📊 My Strategies</h3>
+                            <div class="stat-value">0</div>
+                            <p>Total Created</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>📈 Backtests</h3>
+                            <div class="stat-value">0</div>
+                            <p>Completed</p>
+                        </div>
+                    </div>
+                    
                     <div class="nav">
-                        <a href="/api/builder" class="primary">Strategy Builder</a>
+                        {strategy_builder_nav}
                         <a href="/health">System Health</a>
                         <a href="/docs">API Docs</a>
                         <a href="/logout">Logout</a>
@@ -421,6 +686,7 @@ async def dashboard(request: Request, current_user = Depends(get_current_user_op
             "email": email,
             "user_id": getattr(current_user, 'id', None),
             "is_active": getattr(current_user, 'is_active', True),
+            "strategy_builder_available": strategy_builder_available
         })
         
     except Exception as e:
@@ -528,6 +794,7 @@ async def root_login(request: Request, current_user = Depends(get_current_user_o
                             <button type="submit" class="btn">Login</button>
                         </form>
                         <div class="links">
+                            <a href="/register">Create Account</a> |
                             <a href="/">Back to Home</a> | 
                             <a href="/docs">API Docs</a>
                         </div>
@@ -696,18 +963,128 @@ async def root_logout(request: Request):
         logger.error(f"Error in logout: {str(e)}")
         raise HTTPException(status_code=500, detail="Logout failed")
 
-# Builder route redirect
+# Enhanced builder route with fallback
 @app.get("/builder", response_class=HTMLResponse)
-async def builder_redirect(current_user = Depends(get_current_user_optional)):
-    """Redirect to builder API endpoint"""
-    if not current_user:
-        return RedirectResponse(url="/login?message=Please log in to access the strategy builder", status_code=302)
-    return RedirectResponse(url="/api/builder", status_code=302)
+async def builder_page(request: Request, current_user = Depends(get_current_user_optional)):
+    """Strategy builder page with enhanced UI"""
+    try:
+        if not current_user:
+            return RedirectResponse(url="/login?message=Please log in to access the strategy builder", status_code=302)
+        
+        if not strategy_builder_available:
+            return HTMLResponse(
+                content="""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Strategy Builder - Not Available</title>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        body {
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            max-width: 800px; margin: 100px auto; padding: 20px;
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white; text-align: center; min-height: 100vh;
+                        }
+                        .container {
+                            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+                            border-radius: 15px; padding: 40px;
+                        }
+                        .btn {
+                            background: rgba(255, 255, 255, 0.2); color: white;
+                            padding: 12px 24px; text-decoration: none; border-radius: 25px;
+                            border: 2px solid rgba(255, 255, 255, 0.3); display: inline-block;
+                            margin: 10px; transition: all 0.3s ease;
+                        }
+                        .btn:hover {
+                            background: rgba(255, 255, 255, 0.3);
+                            transform: translateY(-2px);
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>🚧 Strategy Builder Not Available</h1>
+                        <p>The strategy builder components are not currently loaded.</p>
+                        <p>Please check the system configuration and try again.</p>
+                        <a href="/health" class="btn">Check System Health</a>
+                        <a href="/dashboard" class="btn">Back to Dashboard</a>
+                    </div>
+                </body>
+                </html>
+                """,
+                status_code=503
+            )
+        
+        # If templates available, use template, otherwise redirect to API
+        if templates and os.path.exists("templates/builder"):
+            return templates.TemplateResponse("builder/builder.html", {
+                "request": request,
+                "user": current_user,
+                "strategy_builder_available": strategy_builder_available
+            })
+        else:
+            return RedirectResponse(url="/api/builder", status_code=302)
+            
+    except Exception as e:
+        logger.error(f"Error in builder page: {str(e)}")
+        return HTMLResponse(
+            content="""
+            <!DOCTYPE html>
+            <html>
+            <head><title>Builder Error</title></head>
+            <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px;">
+                <h1>Builder Error</h1>
+                <p>Sorry, there was an error loading the strategy builder.</p>
+                <p><a href="/dashboard">Back to Dashboard</a></p>
+            </body>
+            </html>
+            """,
+            status_code=500
+        )
+
+# Strategy management endpoints
+@app.get("/strategies", response_class=HTMLResponse)
+async def strategies_page(request: Request, current_user = Depends(get_current_user_optional)):
+    """Strategies management page"""
+    try:
+        if not current_user:
+            return RedirectResponse(url="/login?message=Please log in to view your strategies", status_code=302)
+        
+        if templates:
+            return templates.TemplateResponse("strategy_view.html", {
+                "request": request,
+                "user": current_user,
+                "strategy_builder_available": strategy_builder_available
+            })
+        else:
+            return HTMLResponse(
+                content="""
+                <!DOCTYPE html>
+                <html>
+                <head><title>My Strategies</title></head>
+                <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px;">
+                    <h1>My Strategies</h1>
+                    <p>Strategy management interface coming soon...</p>
+                    <p><a href="/dashboard">Back to Dashboard</a> | <a href="/builder">Create New Strategy</a></p>
+                </body>
+                </html>
+                """,
+                status_code=200
+            )
+            
+    except Exception as e:
+        logger.error(f"Error in strategies page: {str(e)}")
+        return HTMLResponse(
+            content="<h1>Strategies Error</h1><p>Please try again later.</p>",
+            status_code=500
+        )
 
 # Error handlers
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    """Global exception handler"""
+    """Global exception handler with enhanced logging"""
     logger.error(f"Global exception: {str(exc)} for URL: {request.url}")
     
     if templates:
@@ -724,7 +1101,8 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={
             "error": "Internal server error",
             "detail": str(exc) if getattr(settings, 'debug', False) else "An unexpected error occurred",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
+            "strategy_builder_available": strategy_builder_available
         },
         status_code=500
     )
@@ -738,7 +1116,8 @@ async def not_found_handler(request: Request, exc):
         content={
             "error": "Page not found",
             "detail": f"The requested URL {request.url} was not found",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
+            "suggestion": "Try /dashboard, /builder, or /docs"
         },
         status_code=404
     )
@@ -759,14 +1138,25 @@ async def options_handler(request: Request):
 # Application lifecycle events
 @app.on_event("startup")
 async def startup_event():
-    """Startup tasks"""
+    """Enhanced startup tasks"""
     try:
         logger.info("Strategy Builder SaaS application starting up...")
         logger.info("Running on: http://127.0.0.1:5001")
         logger.info("Documentation: http://127.0.0.1:5001/docs")
         logger.info("Dashboard: http://127.0.0.1:5001/dashboard")
-        logger.info("Builder: http://127.0.0.1:5001/api/builder")
+        logger.info("Builder: http://127.0.0.1:5001/builder")
         logger.info("Health: http://127.0.0.1:5001/health")
+        
+        if strategy_builder_available:
+            logger.info("✅ Strategy Builder: Available")
+            logger.info("   - Visual condition builder: Ready")
+            logger.info("   - Code generation: Ready")
+            logger.info("   - Template system: Ready")
+        else:
+            logger.warning("❌ Strategy Builder: Not Available")
+            logger.warning("   - Check parser.py and generator.py imports")
+            logger.warning("   - Verify templates directory exists")
+            
     except Exception as e:
         logger.error(f"Error in startup event: {str(e)}")
 
@@ -775,6 +1165,7 @@ async def shutdown_event():
     """Shutdown tasks"""
     try:
         logger.info("Strategy Builder SaaS application shutting down...")
+        logger.info("Cleaning up resources...")
     except Exception as e:
         logger.error(f"Error in shutdown event: {str(e)}")
 
@@ -783,7 +1174,9 @@ if __name__ == "__main__":
     import uvicorn
     
     try:
-        logger.info("Starting development server...")
+        logger.info("Starting Strategy Builder SaaS development server...")
+        logger.info(f"Strategy Builder Available: {strategy_builder_available}")
+        
         uvicorn.run(
             "app.main:app",
             host="127.0.0.1",

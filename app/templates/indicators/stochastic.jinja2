@@ -1,0 +1,22 @@
+# Stochastic Oscillator Calculation
+stoch_k_period = {{ k_period | default(14) }}
+stoch_d_period = {{ d_period | default(3) }}
+stoch_smooth = {{ smooth | default(3) }}
+
+stoch_k, stoch_d = talib.STOCH(
+    data['high'].values,
+    data['low'].values,
+    data['close'].values,
+    fastk_period=stoch_k_period,
+    slowk_period=stoch_smooth,
+    slowk_matype=0,
+    slowd_period=stoch_d_period,
+    slowd_matype=0
+)
+
+data['stoch_k'] = stoch_k
+data['stoch_d'] = stoch_d
+
+# Handle NaN values
+data['stoch_k'].fillna(50, inplace=True)
+data['stoch_d'].fillna(50, inplace=True)

@@ -1,0 +1,20 @@
+# Bollinger Bands Calculation
+bb_period = {{ period | default(20) }}
+bb_std = {{ std | default(2) }}
+
+bb_upper, bb_middle, bb_lower = talib.BBANDS(
+    data['{{ source | default("close") }}'].values,
+    timeperiod=bb_period,
+    nbdevup=bb_std,
+    nbdevdn=bb_std,
+    matype=0
+)
+
+data['bb_upper'] = bb_upper
+data['bb_middle'] = bb_middle
+data['bb_lower'] = bb_lower
+
+# Handle NaN values
+data['bb_upper'].fillna(method='bfill', inplace=True)
+data['bb_middle'].fillna(method='bfill', inplace=True)
+data['bb_lower'].fillna(method='bfill', inplace=True)
